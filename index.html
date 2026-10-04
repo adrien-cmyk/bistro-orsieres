@@ -96,6 +96,13 @@ main{min-width:0}
 .prow .metier{font-family:var(--serif);font-size:17px;flex-shrink:0}
 .prow .dots{flex:1;min-width:24px;border-bottom:2px dotted var(--line);transform:translateY(-5px);margin:0 10px}
 .prow .who{color:var(--muted);white-space:nowrap}
+.f-card{padding-top:0}
+.f-head{position:relative;margin:0 -22px}
+.f-coverwrap{height:160px;overflow:hidden;border-radius:12px 12px 0 0}
+.f-cover{display:block;width:100%;height:100%}
+.f-avatar{position:absolute;left:24px;bottom:-30px;width:78px;height:78px;border-radius:20px;background:#fff;box-shadow:0 5px 16px rgb(43 34 20 / 20%);display:grid;place-items:center;font-family:var(--serif);font-size:36px;line-height:1}
+.f-body{padding-top:44px}
+@media(max-width:560px){.f-coverwrap{height:120px}.f-avatar{width:64px;height:64px;font-size:30px;border-radius:16px;bottom:-24px}.f-body{padding-top:36px}}
 .statut{display:inline-block;background:var(--red-wash);color:var(--caramel-ink);border-radius:8px;padding:9px 13px;font-size:13px;margin:12px 0 2px}
 .f-tel{margin-top:10px}
 .f-note{color:var(--muted);font-size:13px;margin-top:12px}
@@ -829,16 +836,51 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
     main.scrollIntoView({behavior:'smooth', block:'start'});
   }
 
+  // Tons de bannière par couleur de secteur : [foncé, moyen, fond]
+  const BTONE = {
+    c0:['#8d5620','#c99a62','#f2e3cd'],
+    c1:['#8f6c20','#d2ad5e','#f3e9ca'],
+    c2:['#4e5d3a','#93a172','#e6e9d3'],
+    c3:['#96643f','#c1906b','#f0e0d0'],
+    c4:['#a8604a','#d8a28d','#f4e2d8'],
+    c5:['#a34b55','#cf8f99','#f3dfdf']
+  };
+
+  function bannerSVG(a){
+    const t = BTONE[colorOf(a.secteur)];
+    let s = 7; for(let k = 0; k < a.nom.length; k++) s = (s * 31 + a.nom.charCodeAt(k)) >>> 0;
+    const rnd = n => { s = (s * 1103515245 + 12345) >>> 0; return s % n; };
+    const ridge = (base, amp, fill, op) => {
+      let d = 'M0 170 L0 ' + (base + rnd(amp));
+      for(let x = 60; x <= 600; x += 60){
+        d += ' L' + x + ' ' + (base + (rnd(2) ? -1 : 1) * rnd(amp));
+      }
+      d += ' L600 170 Z';
+      return '<path d="' + d + '" fill="' + fill + '" opacity="' + op + '"/>';
+    };
+    return '<svg class="f-cover" viewBox="0 0 600 170" preserveAspectRatio="xMidYMax slice" aria-hidden="true">' +
+      '<rect width="600" height="170" fill="' + t[2] + '"/>' +
+      '<circle cx="' + (70 + rnd(460)) + '" cy="' + (30 + rnd(22)) + '" r="' + (13 + rnd(9)) + '" fill="' + t[1] + '" opacity=".6"/>' +
+      ridge(92, 24, t[1], '0.45') +
+      ridge(116, 22, t[1], '0.85') +
+      ridge(140, 18, t[0], '1') +
+      '</svg>';
+  }
+
   function renderFiche(){
     const a = ACTEURS[ficheId];
     if(a == null){ view = 'carte'; renderCarte(); return; }
+    const tone = BTONE[colorOf(a.secteur)];
     let tel = '';
     if(a.telephone){
       tel = '<p class="f-tel"><a href="tel:+41' + a.telephone.replace(/\D/g,'').slice(1) + '">' + esc(a.telephone) + '</a> — numéro public, appel direct</p>';
     }
     main.innerHTML =
       '<div class="sujet-top"><button type="button" class="btn btn-ghost" data-fiche-back>&larr; Retour aux résultats</button></div>' +
-      '<article class="post">' +
+      '<article class="post f-card">' +
+      '<div class="f-head"><div class="f-coverwrap">' + bannerSVG(a) + '</div>' +
+      '<span class="f-avatar" style="color:' + tone[0] + '">' + esc(a.nom[0]) + '</span></div>' +
+      '<div class="f-body">' +
       '<p class="kick">' + esc(a.localite) + ' · ' + esc(a.secteur) + '</p>' +
       '<h2 class="sujet-h">' + esc(a.nom) + '</h2>' +
       '<p>' + esc(a.service) + '</p>' +
@@ -848,8 +890,8 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
       '<p><a href="' + esc(a.source) + '" target="_blank" rel="noopener noreferrer">Voir la fiche source</a></p>' +
       '<div class="act"><button type="button" class="btn btn-red" data-invite>Inviter à rejoindre le Bistro</button></div>' +
       '<p class="fb" id="invite-fb" aria-live="polite"></p>' +
-      '<p class="f-note">La messagerie du Bistro s\'active lorsque le titulaire confirme sa fiche — en attendant, le téléphone public reste le bon canal.</p>' +
-      '</article>';
+      '<p class="f-note">La messagerie du Bistro s\'active lorsque le titulaire confirme sa fiche — en attendant, le téléphone public reste le bon canal. Le logo et la photo de couverture seront fournis par l\'entreprise à ce moment-là ; d\'ici là, le Bistro habille chaque fiche aux couleurs de son secteur.</p>' +
+      '</div></article>';
   }
 
   // ---- clics ----

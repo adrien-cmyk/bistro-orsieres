@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Bistro d'Orsières — maquette</title>
+<style>
+:root{
+  color-scheme:light;
+  --paper:#f8f5e9;           /* crème chaude */
+  --panel:#e7e7cf;           /* vert clair, lumière de clairière */
+  --ink:#36291a;             /* brun foncé, bois sombre */
+  --muted:#79705c;
+  --line:#ddd7c0;
+  --red:#a85e14;             /* accent principal : orange brûlé */
+  --red-dark:#8a4c10;
+  --red-ink:#4e5d3a;         /* vert sapin */
+  --red-wash:#f2e5c4;        /* ocre clair */
+  --bois-ink:#8d5620;        /* brun roux */
+  --caramel-ink:#8f6c20;     /* ocre doré */
+  --sable:#d8ab66;
+  --nuit:#96643f;            /* terracotta */
+  --myrtille:#a34b55;        /* framboise */
+  --prune:#a8604a;           /* pêche foncée */
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:-apple-system,system-ui,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#d8d2ba;font-family:var(--sans);color:var(--ink);font-size:15px;line-height:1.55;padding:18px}
+#app{max-width:1060px;margin:0 auto;background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 20px 50px rgb(54 41 26 / 12%)}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px;border-radius:4px}
+[hidden]{display:none!important}
+h1,h2,h3,p{margin:0}
+small{font-size:12.5px}
+
+/* ---------- header ---------- */
+.hd{display:flex;align-items:center;gap:16px;padding:22px 32px;border-bottom:1px solid var(--line);background:#fff}
+.hd-logo svg{display:block;height:52px;width:auto}
+.hd-name{flex:1;min-width:0}
+.hd-name strong{display:block;font-family:var(--serif);font-weight:400;font-size:27px;letter-spacing:-.3px;line-height:1.1}
+.hd-name span{display:block;color:var(--muted);font-size:13px;margin-top:3px}
+.hd-badge{font-size:12px;color:var(--caramel-ink);border:1px solid #e0cda2;background:var(--red-wash);padding:5px 10px;border-radius:999px;white-space:nowrap}
+
+/* ---------- nav ---------- */
+.nav{display:flex;gap:4px;padding:10px 26px;background:#fff;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.nav button{border:0;background:transparent;color:var(--muted);padding:9px 13px;border-radius:8px}
+.nav button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* ---------- hero ---------- */
+.hero{padding:36px 32px 30px;background:var(--panel);border-bottom:1px solid var(--line)}
+.hero .kick{font-family:var(--serif);font-style:italic;color:var(--red-ink);font-size:16px}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(27px,4vw,38px);line-height:1.18;letter-spacing:-.6px;margin:8px 0 18px;max-width:620px}
+.search{display:flex;gap:10px;max-width:640px;flex-wrap:wrap}
+.search-box{position:relative;flex:1 1 320px}
+.search-box svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);pointer-events:none}
+.search-box input{width:100%;border:1.5px solid var(--ink);border-radius:10px;background:#fff;padding:12px 14px 12px 40px}
+.search-box input::placeholder{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:10px;padding:12px 17px;font-weight:600;font-size:14px}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:var(--red-dark)}
+.btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink);background:#fff}
+.btn-ghost:hover{border-color:var(--ink)}
+.hero .meta{margin-top:14px;color:var(--muted);font-size:13px}
+
+/* ---------- composer ---------- */
+.composer{padding:24px 32px;background:#fff;border-bottom:1px solid var(--line)}
+.composer label{display:block;font-weight:600;font-size:14px}
+.composer input,.composer textarea{display:block;width:100%;max-width:640px;margin:7px 0 14px;border:1px solid var(--line);border-radius:9px;background:var(--paper);padding:11px 13px;resize:vertical}
+.composer .row{display:flex;gap:9px;flex-wrap:wrap}
+
+/* ---------- layout ---------- */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:30px;padding:28px 32px}
+main{min-width:0}
+.sec-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 6px;flex-wrap:wrap}
+.sec-top h2{font-family:var(--serif);font-weight:400;font-size:24px;letter-spacing:-.3px}
+.sec-top small{color:var(--muted)}
+
+/* ---------- la carte (annuaire) ---------- */
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 8px}
+.chips button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 13px;font-size:13px;color:var(--muted)}
+.chips button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.carte{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 24px 20px;margin-top:12px}
+.carte h3{font-family:var(--serif);font-weight:400;font-size:19px;color:var(--red-ink);margin:22px 0 4px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+.prow{display:flex;align-items:baseline;gap:4px;width:100%;border:0;background:transparent;text-align:left;padding:11px 2px;border-radius:6px}
+.prow:hover .metier{color:var(--red-ink)}
+.prow .metier{font-family:var(--serif);font-size:17px;flex-shrink:0}
+.prow .dots{flex:1;min-width:24px;border-bottom:2px dotted var(--line);transform:translateY(-5px);margin:0 10px}
+.prow .who{color:var(--muted);white-space:nowrap}
+.tag{font-size:11.5px;font-weight:600;border-radius:5px;padding:3px 7px;margin-left:10px;flex-shrink:0}
+.tag-ent{background:var(--panel);color:var(--ink)}
+.tag-pro{background:var(--red-wash);color:var(--caramel-ink)}
+.carte h3[data-c="c0"]{color:var(--bois-ink);border-color:#dfcbb0}
+.carte h3[data-c="c1"]{color:var(--caramel-ink);border-color:#e4d2ae}
+.carte h3[data-c="c2"]{color:var(--red-ink);border-color:#cdd4bd}
+.carte h3[data-c="c3"]{color:var(--nuit);border-color:#dccabb}
+.carte h3[data-c="c4"]{color:var(--prune);border-color:#e3ccc2}
+.carte h3[data-c="c5"]{color:var(--myrtille);border-color:#e2c6c9}
+.carte-empty{padding:26px 4px;color:var(--muted);font-family:var(--serif);font-style:italic;font-size:16px}
+.carte h3 .text-n{font-family:var(--sans);font-size:12px;color:var(--muted);font-style:normal}
+.carte-add{margin:22px 0 4px}
+.hl{background:#f0dfa6;border-radius:3px}
+
+/* ---------- posts ---------- */
+.post{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:14px 0}
+.post-head{display:flex;align-items:center;gap:11px;margin-bottom:12px;flex-wrap:wrap}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-family:var(--serif);font-size:17px;flex-shrink:0}
+.post-head .a{flex:1;min-width:0}
+.post-head strong{display:block;font-size:14px}
+.post-head small{color:var(--muted)}
+.kind{font-size:11.5px;font-weight:600;background:var(--panel);border-radius:5px;padding:4px 8px;white-space:nowrap}
+.post h3{font-family:var(--serif);font-weight:400;font-size:19px;margin:0 0 7px}
+.post p{color:var(--muted);margin-bottom:14px}
+.post .act{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.post .act small{color:var(--muted)}
+.join{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:8px 13px;font-weight:600;font-size:13.5px}
+.join[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.status{border-top:1px solid var(--line);margin-top:14px;padding-top:11px;font-size:12.5px;color:var(--muted)}
+
+/* ---------- discussions ---------- */
+.post h3 .post-open{all:unset;cursor:pointer;font:inherit;color:inherit}
+.post h3 .post-open:hover,.post h3 .post-open:focus-visible{color:var(--bois-ink);outline:none;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.talk{border:0;background:transparent;color:var(--red-ink);font-weight:600;font-size:13.5px;padding:8px 2px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.thread{border-top:1px solid var(--line);margin-top:16px;padding-top:4px}
+.reply{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+.reply .avatar{width:28px;height:28px;font-size:14px}
+.reply small{color:var(--muted);font-size:12px}
+.reply p{margin:2px 0 0;color:var(--muted)}
+.thread-empty{padding:12px 0;color:var(--muted);font-family:var(--serif);font-style:italic}
+.reply-form{display:flex;gap:9px;align-items:flex-start;flex-wrap:wrap;margin-top:13px}
+.reply-form textarea{flex:1 1 220px;min-width:0;border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:9px 11px;resize:vertical}
+
+/* ---------- aside ---------- */
+aside section{margin-bottom:24px}
+aside h2{font-family:var(--serif);font-weight:400;font-size:19px;margin-bottom:4px}
+aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
+.mini{display:flex;align-items:center;gap:10px;width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left;padding:12px 0}
+.mini span:nth-child(2){flex:1;min-width:0}
+.mini strong{display:block;font-size:14px}
+.mini small{color:var(--muted)}
+.cafe{background:var(--red-ink);color:var(--paper);border-radius:12px;padding:20px}
+.cafe h2{color:#fff}
+.cafe p{color:#d6dcc5;font-size:13.5px;margin:8px 0 14px}
+.cafe button{background:transparent;border:0;color:#e9ca80;padding:2px 0;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.detail{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;margin-top:4px}
+.detail .kick{font-family:var(--serif);font-style:italic;color:var(--red-ink);font-size:14px}
+.detail h3{font-family:var(--serif);font-weight:400;font-size:19px;margin:4px 0 6px}
+.detail p{color:var(--muted);margin-bottom:12px;font-size:14px}
+.detail textarea{width:100%;border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:10px 12px;margin:7px 0 10px;resize:vertical}
+.detail .fb{color:var(--red-ink);font-size:13px;margin-top:10px}
+.detail label{font-weight:600;font-size:13.5px}
+
+/* ---------- footer ---------- */
+.ft{border-top:1px solid var(--line);padding:20px 32px 26px;background:#fff}
+.ft .villages{font-family:var(--serif);font-style:italic;color:var(--muted);font-size:14px}
+.ft .legal{color:var(--muted);font-size:12px;margin-top:10px}
+
+@media(max-width:820px){
+  .layout{grid-template-columns:1fr;padding:22px 20px}
+  .hd{padding:18px 20px}
+  .hero,.composer{padding-left:20px;padding-right:20px}
+  .ft{padding-left:20px;padding-right:20px}
+  .carte{padding:6px 16px 16px}
+}
+@media(max-width:560px){
+  body{padding:8px}
+  .prow{flex-wrap:wrap}
+  .prow .dots{display:none}
+  .prow .who{width:100%;white-space:normal;margin-top:1px}
+  .prow .tag{margin-left:0;margin-top:5px}
+  .hd-badge{display:none}
+}
+@media(prefers-reduced-motion:no-preference){
+  .detail{animation:in .25s ease}
+  @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header class="hd">
+    <span class="hd-logo" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 547.4 704.6" role="img" aria-label="Armoiries de la commune d'Orsières">
+        <defs><style>.st0{fill:#ab001e}.st1{fill:#c1001f}.st2{fill:#fff}.st3{fill:#262427}</style></defs>
+        <path class="st2" d="M273.7,0H0v361.3c0,99.6,43.1,194.7,119,259.3,75.9,64.6,154.7,84.1,154.7,84.1,0,0,83.7-20.7,161.7-90.2,71.6-63.8,112-155.6,112-251.5V0h-273.7Z"/>
+        <g>
+          <path class="st0" d="M148.4,459.8s-3.6-3.3-9.7,2.3c-6.1,5.5-5.4,6.4-5.4,6.4,0,0,9.2-3.3,14.3-4.4,0,0,2.5-.4,2.2-2.1-.2-1.3-1.4-2.2-1.4-2.2"/>
+          <path class="st0" d="M149.8,450.7s-4.1-4.5-12.3,1.7c-8.2,6.2-7.5,7.3-7.5,7.3,0,0,11.8-3.1,18.3-3.9,0,0,3.2-.2,3-2.3-.1-1.7-1.5-2.9-1.5-2.9"/>
+          <path class="st0" d="M152.7,443.7s-.8-6.5-7.7-2.1c-1.4.3-2.8,1.2-4.6,2.3-8.8,5-8.3,6.2-8.3,6.2,0,0,11.9-1.5,18.4-1.4,0,0,3.1.2,3.2-1.9.1-1.7-1.1-3-1.1-3"/>
+          <path class="st0" d="M152.3,435.8s-2.9-4.4-10.6-.3c-7.8,4.1-7.3,5.1-7.3,5.1,0,0,10.4-1,16-.7,0,0,2.7.3,2.9-1.5.1-1.5-.9-2.7-.9-2.7"/>
+          <path class="st0" d="M341.1,494.9s-4.2-4.3-12.1,2c-7.9,6.3-7.1,7.4-7.1,7.4,0,0,11.5-3.4,17.9-4.3,0,0,3.1-.3,2.9-2.3-.2-1.7-1.6-2.8-1.6-2.8"/>
+          <path class="st0" d="M332.8,488s-5-3.4-11.6,4.4c-6.6,7.9-5.7,8.8-5.7,8.8,0,0,10.8-5.7,16.9-7.9,0,0,3-.9,2.4-2.9-.5-1.6-2.1-2.5-2.1-2.5"/>
+          <path class="st0" d="M330.6,479.6s-3.5-5.6-7.8,1.3c-1.1.9-2,2.3-3.2,4-5.8,8.3-4.8,9.1-4.8,9.1,0,0,10.1-6.5,16-9.1,0,0,2.9-1.2,2.1-3.1-.6-1.6-2.3-2.3-2.3-2.3"/>
+          <path class="st0" d="M329,472.3s-4.3-2.6-9.5,4.3c-5.2,6.9-4.4,7.7-4.4,7.7,0,0,8.8-5.3,13.8-7.4,0,0,2.5-.9,1.9-2.6-.5-1.3-1.9-2-1.9-2"/>
+          <path class="st0" d="M159.5,138.1s4.1-4.7-3.9-11.7c-8-7-9.1-6.1-9.1-6.1,0,0,5.3,11,7.2,17.2,0,0,.8,3.1,3,2.6,1.8-.4,2.8-1.9,2.8-1.9"/>
+          <path class="st0" d="M171.7,136s3.5-5.2-5.6-11.4c-9.1-6.2-10-5.2-10-5.2,0,0,6.9,10.5,9.7,16.5,0,0,1.2,3,3.4,2.3,1.8-.6,2.6-2.2,2.6-2.2"/>
+          <path class="st0" d="M182.1,139.2s6.7-2.4.2-7.9c-.7-1.2-2.1-2.4-3.7-3.9-7.8-7.3-8.9-6.5-8.9-6.5,0,0,4.9,11.2,6.6,17.5,0,0,.7,3.1,2.9,2.7,1.8-.3,2.9-1.8,2.9-1.8"/>
+          <path class="st0" d="M188.9,139.6s3.9-3.6-2.4-10.2c-6.2-6.6-7.2-6-7.2-6,0,0,3.6,9.7,4.7,15.1,0,0,.4,2.6,2.3,2.4,1.6-.2,2.5-1.4,2.5-1.4"/>
+          <path class="st0" d="M144.1,248.3s-2.2-5.6-9.9-2.4c-7.7,3.2-7.4,4.5-7.4,4.5,0,0,9.8.9,15,2.3,0,0,2.5.8,2.9-1.2.3-1.7-.5-3.3-.5-3.3"/>
+          <path class="st0" d="M139.2,252.8c-2.3.3-4.1.6-5.4.9-.9.2-1.8.3-2.7.6-9,2.5-8.8,3.6-8.8,3.6,0,0,10.5,1.2,15.9,2.7,0,0,2.6.8,3.3-.9.1-.3.3-.6.6-.9,1.2.4,2.4.9,3.3,1.2,0,0,2.4,1.2,3.4-.5.8-1.3,4.6-4,4.6-4,0,0-4.9-3.9-14.2-2.7"/>
+          <path class="st0" d="M150.9,237s-2.6-5.6-12.3-1.2c-9.7,4.4-9.3,5.8-9.3,5.8,0,0,12.2-.3,18.6.4,0,0,3.1.5,3.6-1.7.4-1.8-.6-3.4-.6-3.4"/>
+          <path class="st0" d="M151.1,227s-3.3-4.1-10.4,1.4c-7.1,5.6-6.6,6.6-6.6,6.6,0,0,10-2.7,15.5-3.3,0,0,2.7-.2,2.6-2.1,0-1.6-1.2-2.7-1.2-2.7"/>
+          <path class="st0" d="M224.6,84.4s-8-4.3-11.6,3.5c-3.5,7.8-1.8,29.1,25.1,35.4,26.9,6.3,37.9,4.3,37.9,4.3l.8-4s-25.6-.3-42-15.3c-16.3-15.1-10.3-23.9-10.3-23.9"/>
+          <path class="st3" d="M344.4,501.1c.3-.4,2.6-2.4,3.7-2.8,1.8-.3,12.1,0,15.7-.2,2.9,0,6.8-.3,12.4-1.2,12.6-2.1,18.8-12.6,19.1-16.8.3-5.5,1.6-8.7,3.1-4.6,2.4,6.9,8,3.8,8,3.8-5.9-6-1.7-9.4,1.3-13.5,1.1-1.5,2.5-2.9,2.6-6.9,0-2-.5-6-.4-8.4.2-2.6,1.4-3.6,1.7-1.5,1.7,10,7.1,8.3,9.9,6.9-2.9-2.7-5.5-8.5-4.6-12.4.5-2.4,1.1-6-.1-8-1.8-2.9-.2-5.2.6-3.7,1.5,2.9,4.8,2.2,6.4,1.3-4-2-5.1-9.3-5.1-9.3,0,0,.4-5.5-.2-14.6-.7-9-17.6-30-30.4-46.1-12.8-16.1-9.7-19-12.3-29.6,10.8,8.2,19.7,3.1,26.9-6.2,5.7-7.5,7.2-19.5,2.6-20.9,1.3,4,.8,10.7-9.5,16.5-11.5,6.4-21.5-6.8-23.5-11-2-4.2-17.9-38.8-17.9-38.8,0,0-11.2-22.5-4.2-52.3,4.5-19,4-35.2,3-44.4-.2-1.4-.4-6.1-2.1-7.3-1.2-1-.2-1.5.7-1.1,8.5,2.7,8.9,9.7,8.9,9.7,4.4-4.1,1.9-10.5-.5-14.2-3.9-5.4-8.7-7.8-9.6-8-1.2-.2.7-2,3-.8,6.8,3.2,10.1,0,10.1,0,0,0-.9-.2-3.2-1.8-12.1-7.3-10-20.6-11.3-29-5.4,4.3-8.4,2.6-6.7,1.3,1.5-1.6,8-5.7,11.6-8.8,10.3-8.9,10.5-15.3,7.5-20.1-8.6-11.3-14.6-2.5-22.4,4.3-.3.3-.6.6-.9.2-.4-.6-1.2-2,4.1-6.6,2.7-2.7,8.2-5.1-.3-12.3-6.6-5.6-13.7.6-13.8,1.1,0,.5-4.3.4-6.5.2-2.2-.3-9.2-1.4-19.8-1.6-10.6-.2-13.3,1.5-14.5,2.1-.8.4-1.4,1.9-9.4,0-11.4-3.1-14.1-4.2-21-5.9-6.5-1.5-9.1-1-9.1-1,0,0-5.1-.2-6.3,5.7-.7,2.8,3.1,13.6,5.1,16.4,2,2.8,27.1,10.7,29.1,11.8,1,.5,1.8.9,1.9,4.7,0,3.9-1.9,13.4-2.4,14.4-1.4,3.4-2.9,3.6-3.9,3.6-1,0-28.1-.6-29.8,0-1.7.6-3,2.6-3.1,5.1-.2,2.5,6.2,5.4,11.9,6.5,2.5.4,20.1,2,28.6,2.9,5.2.5.7,6.2-.5,8.1-1.2,2-10.2,11.4-16.9,13.2-6.9,2.3-12,2.9-18.2,5.5,3.1,2.4,3.2,5.3,3.5,7.6.6,5.1-.2,8.5-5.5,8.7-2,0-5.9.8-10.7-1.1-5.7-2.6-8.2-5.5-12.2-7.6-4.8-2.5-10.8-4.1-13.7-5.9-8.3-5.3-9.8-8.1-11.2-10.6-2.3-4,5.8,1.5,5-.3-.8-1.8-3-5-5.5-7.4-2.4-2.4-.5-16.2-.5-17.8s-1.2-2.1-2-3.1c1.2-3.6-4.5-3.3-8.7-6.6,1.9,3,2.1,3,1.8,6.8-.6-3-5.6-1.6-11-9.6,1.7,4.5-1.3,5.5-1.5,8.6-.7-3-3.6-3.6-9.7-8.3.8,7.1-1,4.1-2.7,7.5-1.6-4.9-5-6.6-9.4-9,.8,1.5,1.2,6.1,1.2,6.1,0,0-2.4.1-.7,9.2,1.6,9,8.7,16,8.7,16,2.4,29,2.5,30.5,5.1,34.2,4.1,6,15,4.5,15.6,4.8.8.6-5.1,5.5-4.1,10.2,4.1-2.4,10.1-5.1,15.1-1.9,3.9,4,9.1.5,9.8,1.5.7,1.2-11.2,1.8-10.5,12.3,1.9-3.6,11.9-6.3,15.1-4.2,4.3,1.7,10.4-2,9.8-.8-3.1,3.1-9.8,3.6-9.3,13.3,5.1-7.1,11.8-6.2,13.5-5.7,2.5,1.1,5.9-.9,6.6-.6.5.3-1.6,1.5-1.7,4.4,0,1.8.7,4.2,4.1,4.3-.7-1,0-3.7,2.7-4.7,4.2-1.7,8.4.8,12.8,1.7,3.7,1,6.1,1,8.7-.2,1.6-.7,5.6-5,8.5-6.7.8-.4,1.4-.5,1.9-.2.5.5-.3,1.5-1.1,2.3-2.3,2.2-5.9,5.4-8.5,7.5-2.4,2-17.7,13.9-30.2,14-9.6.3-26.4,4.5-27.7,5-1.3.4-6.1,2.6-9.4.2-3.3-2.4-9.1-3.9-10.7-3.6-1.7.3-2.5-.6-2.5-.6-3-1.6-7.9-11.6-11.7-17.7-3.8-6.1-11.8-3.8-11.8-3.8,0,0-5.2.2-9.3,6.8,3.7-.1,5.9-1.4,6.9.8.9,2.2-2.7,1.5-6.6,4-3.9,2.5-4.6,3.1-4.6,3.1,0,0,8.6-.6,9.1,2,.5,2.6-6,4.4-9,5.6-3,1.2-4.1,3.5-4.1,3.5,0,0,13.7.5,8.2,4.6-2.6,1.9-6.6,1.1-11.1,3.6,5.4,0,6.5,3.7,11.4,4,15.5-.1,10.5,4.2,14.2,8.6,21.1,25.3,28.2,18.7,28.2,18.7,3-2.4,10.7-7.3,9-4.3-3.3,4.5-2.4,9.5-1.7,11.2,5-7.8,11.1-8.4,15.4-9,4.3-.6,6.9-6.6,7.3-5.4-4.3,5.9-2.5,12.1.3,13.8,0-2.2.9-6.3,4.3-8.4,2.1-1.3,5.4-.7,7.3-1.9,3.4-2.1,6.5-6.6,6.9-6.4.6.4-.7,1.1-1.1,3.8-.6,3.8,3.9,8.8,4,9.1.8-12.2,10.1-10.1,11.3-12.7.9-3.8,2-3.1,2-3.1.7,7.2,8.5,7.4,8.5,7.4,0,0-2.1-2.1-1.2-5.2,1.6-5.4,25.2-19.6,25.2-19.6,0,0,1.5-1,2.3-.2.5.4-.8,1.9-.8,1.9,0,0-8.4,9.5-15,15.8-1.9,1.8-2.1,5.3-2.1,6.3.1,3.6-.8,5.5-2.5,7.9-1.7,2.4-7,6.6-7.8,13.7,0,0,7-6.6,9.3-7.2,2.2-.6,2.4,2.6,1.8,3.9-.6,1.3-5.9,8.9-13.6,10.4,0,0,6.3,3.2,10.8,1.6,1.4-.3-.7,2.5-3.2,3.7-2.5,1.2-34.5,13.5-37.3,40.5-.9,6.2-3.7,7.6-6.1,10.2-2.4,2.7-9.5,8.6-8,14.8,3.5-7.5,11.4-7.5,12.2-5.7.3,1-2.2.1-3.4,7.7-2.4,4.7-8.2,2.3-10.5,14.2.3,0,7.4-6.5,12.8-5,1.9,1.1-4.7,3.4-5.3,8.6-1.3,6.6-10.8,2.9-12.6,13.4,6.9-4.8,12.2-1.1,12.2.1,0,1.9-1.1-.5-4.1,4.4-.9,1.4-1.6,2.5-4.6,3.4-2.3.7-7.5-.2-11.4,7.6,4.6-1.7,11-3.3,7.3,4.1-.7,1.7-11.3,12.3-18.9,12.9-4.4.4-8.7,2.4-10.9-2.4-2.2-4.8-7.6-11.1-14.6-11.6-3.4-.6-6.3,1.3-6.3,1.3,0,0-6.7,2.3-9.1,6.3,1.4,0,10.1-.7,7.1,2.8-1.4,1.6-4.8,2.3-8,6.1,1.9,0,4.8,0,6.2,2.3-1,.4-5.7,3-8,6.5,1,0,14.5.3,6.9,4.1,0,0-3.1.2-5,4.4,5.9-1.4,8.5-1.7,9.7,0,0,0,.2.4,5.6,9.1,5.7,9.2,17.8,5.9,17.8,5.9,0,0,3.7-3.9,17.9-.2,14.2,3.7,20.4-5.4,22.6-6.8,2.2-1.4,6.1-6.4,6.1-6.4l.7,1.1c.3.3,2.5,8,9.2,6.5-3.9-7.1-1.3-10-.3-11.5,1-1.5,2.6-3,3.4-4.8.8-1.9.8-4.2,1.9-4.2.2,3,1.1,9.9,8.5,8.2-3.3-3.9-2.4-6.7.2-10,2.5-3.3,2-5.4,2.6-6.6.9-2.5,1.9-2.1,1.9-2.1-.8,10,5.9,10.1,6.8,9.9-4.4-9,1.7-12.4,8.8-21.2.9-1.1,1.8-2.2,2.8-3.5,9.4-11.4,9.1-21.2,9.1-21.2,0,0,1.6-6.3,2.1-27.6.5-21.3,22.2-22,22.2-22h2c0-.1-12.4-16.1-13.2-27.5-.4-9-.2-17.6,7.3-30,7.5-12.4,11.7-12.6,9.7-26.9-.4-2.7,1.6-.9,2.2,1.2.3.7,3.7,11.3-1.5,19-5.8,8.6-16.7,28.1-6.5,46.3,10.3,18.2,18,28,18.9,34.6.9,6.4,1.5,10.3-1.1,12.5,2.1,1.7,8.1-6.1,8.1-12.5s.2-1.8.3-2.3c.4-1.1,1.2-1.7,1.6-1.8,1.2-.2-.9,4.6,2.4,7.6,3.4,3.1,3.1,13.6-1.5,15.7,3.6,1.9,8.9-2,8.9-6.9s3.1-5.5,3.9-4.2c1.1,1.7-2,3.2,1.1,9.3,2.8,5.4,3.6,14.2-1.2,15,7.9,4.3,8.1-5.2,10.2-8.3,1.9-2.8,2.8-.5,2.4,1-.4,2.2-.9,5.3.3,8.2,1.1,3.2,1.8,10.8-4.3,14.8,9.3,3.5,10.6-12.9,13.9-9.1,3.3,3.8,2.6,10.8,2.7,18.4-.3,7.5,2.5,14.8.7,21.8-1.2,4.6-5.2,9.2-6,9.7-.8.5-8.6,6.2-21,4.7-12.4-1.5-14.7,2.6-14.7,2.6,0,0-2.4,1.1-3.5,3,1.2.3,4.4.2,5.1,3-.8.2-3,2-3.7,5.7,3.1-.3,6.4-1,7.1.7-.6.6-3.4.8-5.7,6.7.8,0,7.1-2.6,8.9,2.3,0,0-4.4.8-4.7,5.5,1.2-.3,12.2-3.7,12,1.4-.4,4,3.4,2,4.4.9"/>
+          <path class="st2" d="M316.5,311.9s-14.4-.9-10.2,19c3.9,15.8,11.6,18.8,11.6,18.8-3.8-6.7-11.3-25,.5-29.7,0,0,3.1-.7,2.3-5-.5-2.6-4.3-3-4.3-3"/>
+          <path class="st2" d="M297.4,248.7s14.3,2,10.7-21.3c-3.7-23.3-5.9-23.3-5.9-23.3,0,0,5.4,30.4-6.5,35.1,0,0-3.2.6-2.5,5.7.4,3.1,4.2,3.8,4.2,3.8"/>
+          <path class="st2" d="M158.2,151.6s-3.3-8.5,5.5-9.7c8.8-1.2,9.2.2,9.2.2,0,0-11.6,1.2-11.1,9.2,0,0,.4,2-1.5,2.4-1.2.2-2.1-2-2.1-2"/>
+          <path class="st2" d="M187.5,151.5s3.3-8.5-4.3-9.6c-7.6-1.1-8.1.3-8.1.3,0,0,10.1,1,9.2,9,0,0-.4,2,1.2,2.3,1,.2,1.9-2,1.9-2"/>
+          <path class="st2" d="M277.6,139.4s4.6,1.8,6.3-8.7c2-12.2-.8-14.2-.8-14.2,0,0,0,17.3-5.5,18.5,0,0-1.5,0-1.5,2.3,0,1.4,1.6,2,1.6,2"/>
+          <path class="st2" d="M321.1,326.4s-5.9,3.6-.4,16c5.5,12.4,6.9,12.1,6.9,12.1,0,0-4.8-15.7-.5-23.3,0,0,2.8-3-.3-5.5-2.5-2-5.7.7-5.7.7"/>
+          <path class="st2" d="M248.5,334.6s-5.2-2.4-12.6,8.2c-7.4,10.6-6.5,11.5-6.5,11.5,0,0,10.2-11.8,17.9-12.8,0,0,3.6,0,4.2-3.1.5-2.9-2.9-3.8-2.9-3.8"/>
+          <path class="st2" d="M320.4,223.6s5.9-3.3-1.1-17.3c-7-13.9-8.5-13.5-8.5-13.5,0,0,2.8,17.2,3.2,26.3,0,0,0,4.3,2.6,5.1,2.1.7,3.7-.6,3.7-.6"/>
+          <path class="st2" d="M249.8,346.1s-3.4-2.8-10.9,3.7c-7.5,6.5-7,7.3-7,7.3,0,0,9.7-5.1,15.6-6.1,0,0,2-.3,3-2.1,1-2-.8-2.9-.8-2.9"/>
+          <path class="st2" d="M263.4,188.5s-3.8-2.2-8.8,4.3c-5,6.5-4.4,7.2-4.4,7.2,0,0,7.4-5.5,12.5-6.9,0,0,1.8-.4,2.1-2.1.4-1.9-1.4-2.5-1.4-2.5"/>
+          <path class="st2" d="M276.9,190.5s-4.1-1.6-8,5.7c-3.9,7.3-3.1,7.9-3.1,7.9,0,0,6.4-6.6,11.1-8.9,0,0,1.7-.7,1.8-2.5.1-1.9-1.8-2.2-1.8-2.2"/>
+          <path class="st2" d="M260.8,200.3s-3.9-2-9.9,5.9c-5.9,7.9-5.3,8.6-5.3,8.6,0,0,8.5-7,14-9.3,0,0,1.9-.7,2.5-2.7.6-2.2-1.3-2.6-1.3-2.6"/>
+          <path class="st2" d="M355.2,98.6s-3.9-2-9.9,5.9c-5.9,7.9-5.3,8.6-5.3,8.6,0,0,8.5-7,14-9.3,0,0,1.9-.7,2.5-2.7.6-2.2-1.4-2.6-1.4-2.6"/>
+          <path class="st2" d="M256.1,214.6s-2.2-1.1-5.5,3.3c-3.3,4.4-2.9,4.8-2.9,4.8,0,0,4.7-3.9,7.8-5.2,0,0,1.1-.4,1.4-1.5.3-1.2-.8-1.5-.8-1.5"/>
+          <path class="st2" d="M181.1,189.7s2.4.3,4.1-5c1.6-5.3,1.1-5.5,1.1-5.5,0,0-3.1,5.3-5.6,7.5,0,0-.9.7-.8,1.9,0,1.2,1.2,1.1,1.2,1.1"/>
+          <path class="st2" d="M160.9,249.9s-.7-3.5-8.8-3.3c-8.1.3-8.2,1.1-8.2,1.1,0,0,8.8,1.8,13,4.2,0,0,1.4.9,3,.2,1.7-.7,1-2.2,1-2.2"/>
+          <path class="st2" d="M155.6,257.7s-.7-2.4-6.2-1.8c-5.5.6-5.5,1.1-5.5,1.1,0,0,6.1.8,9.1,2.2,0,0,1,.5,2,0,1.1-.6.6-1.5.6-1.5"/>
+          <path class="st2" d="M162.9,235.9s.9-2.3-3.9-5.1c-4.8-2.8-5.1-2.4-5.1-2.4,0,0,4.4,4.2,6,7.2,0,0,.5,1,1.6,1.2,1.2.2,1.4-.9,1.4-.9"/>
+          <path class="st2" d="M162.7,242.9s.2-3.4-7.1-5.1c-7.3-1.8-7.6-1.1-7.6-1.1,0,0,7.5,3.8,10.7,7,0,0,1.1,1.1,2.6.9,1.7-.2,1.5-1.7,1.5-1.7"/>
+          <path class="st2" d="M162.9,455.2s0-3.3-7.3-4.4c-7.2-1.1-7.5-.4-7.5-.4,0,0,7.5,3.1,10.9,5.9,0,0,1.1,1,2.6.7,1.6-.4,1.2-1.8,1.2-1.8"/>
+          <path class="st2" d="M160.5,462.2s0-2.2-4.9-3.2c-4.9-1-5.1-.5-5.1-.5,0,0,5.1,2.3,7.3,4.3,0,0,.8.7,1.8.6,1.1-.2.9-1.2.9-1.2"/>
+          <path class="st2" d="M164.9,441.9s.4-2.2-4.3-3.9c-4.7-1.7-4.9-1.3-4.9-1.3,0,0,4.6,3.1,6.5,5.4,0,0,.6.8,1.6.8,1.2,0,1.1-1,1.1-1"/>
+          <path class="st2" d="M164.6,448.6s.2-3-6.4-4.7c-6.6-1.6-6.9-1-6.9-1,0,0,6.8,3.5,9.7,6.4,0,0,1,1,2.3.9,1.6-.2,1.3-1.6,1.3-1.6"/>
+          <path class="st2" d="M350.2,484.9s-1.3-2.6-7.5-.5c-6.2,2-6.1,2.7-6.1,2.7,0,0,7.2-.6,11,.3,0,0,1.3.3,2.3-.5,1.1-.9.3-1.9.3-1.9"/>
+          <path class="st2" d="M352.3,491.4s-1.1-2.2-6.4-.6c-5.3,1.6-5.2,2.1-5.2,2.1,0,0,6.1-.4,9.4.5,0,0,1.1.3,2-.4,1-.8.3-1.6.3-1.6"/>
+          <path class="st2" d="M345.7,472.9s-1-2.3-6.4-.9c-5.3,1.3-5.3,1.9-5.3,1.9,0,0,6.1,0,9.3.9,0,0,1.1.4,2-.3,1-.7.3-1.6.3-1.6"/>
+          <path class="st2" d="M347.9,479.1s-1.2-2.4-6.9-.8c-5.7,1.6-5.6,2.2-5.6,2.2,0,0,6.6-.3,10,.7,0,0,1.2.4,2.2-.4,1.1-.8.3-1.7.3-1.7"/>
+          <path class="st2" d="M279.5,204.8s.6,4.4-8.9,7.3c-9.4,2.9-9.9,2.1-9.9,2.1,0,0,9.5-5.6,13.4-10.1,0,0,1.3-1.6,3.3-1.5,2.3.2,2,2.2,2,2.2"/>
+          <path class="st2" d="M245.5,365.1s-3.3-3.1-11.4,2.9c-8.2,6-7.7,6.9-7.7,6.9,0,0,10.4-4.4,16.5-4.9,0,0,2.1-.1,3.2-1.8,1.2-2-.5-3-.5-3"/>
+          <path class="st2" d="M171.3,190.5s-4.5-.4-5.4-10.5c-.8-10.1.1-10.3.1-10.3,0,0,3.6,10.7,7.2,15.6,0,0,1.3,1.7.7,3.6-.7,2.2-2.6,1.6-2.6,1.6"/>
+          <path class="st2" d="M330.1,221s3.5-3-1.7-11.9c-5.2-8.9-6.2-8.6-6.2-8.6,0,0,3.4,11,3.3,17.2,0,0-.1,2.2,1.5,3.5,1.8,1.5,3.1-.2,3.1-.2"/>
+          <path class="st0" d="M247.6,310.8c0-.4.2-.8.4-1.2,1.3-2.8,8.8-1,8.8-1,0,0,22.5,3.5,31,13.3-.4,3.5,0,6.8,0,10.2,0,.8.2,1.7.4,2.6,0,0-14.5-20.2-40.6-23.8"/>
+          <path class="st2" d="M304.7,113.5c-1.5,0-3.7-.5-5.4-1.3-3.1-1.5-5.4-2.3-6.9-2.6-1.2-.3-1.4-.4-1.5-.6-.2-.4-.2-.9,0-1,0,0,.3,0,.4,0h.2c.5,0,2.5.5,5.4.5s5.8-.4,8.4-1.2c1.7-.5,3-.7,4-.7s1.5.3,1.7,1c.3,2.4-1.1,3.8-1.1,3.8-1.2,1.1-2.2,2.2-5.2,2.2"/>
+          <path class="st2" d="M312.6,98.9c-.4,0-.9-.4-1-.6-.2-.7-2.5-6.1-7.6-6.4-1.5,0-4.7-.3-5-.6-.4-.6-.8-1.5-.6-1.8.2-.2,1.4-.7,3.5-.7s3,.3,4.3.7c3.5,1.2,8.3,4.3,7.4,7.7-.3,1-.7,1.7-1.1,1.7"/>
+          <path class="st2" d="M299.2,96s-3.8,1.8-.9,6.5c2.8,4.7,4.1-1.2,4.1-1.2,0-.3-1.3-3-.5-3.9.2-.2.6-.7.6-.8-1.7-.3-3.3-.6-3.3-.6"/>
+          <path class="st2" d="M249.5,79s-4.3-1-5,4.9c.6,2.8,4.5,1.8,4.5,1.8.1-.3-.3-3.2,2-3.6.9-2.7-1.5-3.1-1.5-3.1"/>
+          <path class="st2" d="M297.2,95.5c-.8-.2-1.5-.3-2-.4-.9,1-1.6,2.7,0,5.6.4.7.7,1.1,1,1.4.5-.9.8-1.9.8-1.9,0-.3-1.2-3-.4-3.9.2-.2.6-.7.6-.8"/>
+          <path class="st3" d="M246.8,99.1c-.2-.3-.4-.7-.7-1.1-.4,1.3-2.6,8.6,1.9,14.1,2.8-4.1,5.5-6.8,7.9-8.5-4.6-1.8-8.5-3.5-9.2-4.5"/>
+          <path class="st3" d="M259.3,112.9c1.8-2.6,3.5-4.6,5.2-6.2-2.6-.9-5.4-1.9-7.9-2.9,0,2.8.4,6.2,2.8,9.1"/>
+          <path class="st3" d="M268.4,114.2c1.3-1.9,2.5-3.4,3.8-4.8-1.8-.6-4-1.4-6.5-2.3.2,2.3.9,4.8,2.7,7"/>
+          <path class="st3" d="M248.1,133.4c-1.2-1.5-2.5-3.6-3.7-6.5-2.5,2-3.3,5-3.6,7.1.3-.2.5-.3.8-.4.5-.2,3-.2,6.4-.2"/>
+          <path class="st3" d="M252.7,128.4c-1.8,1.4-2.7,3.3-3.2,5,1.8,0,3.8,0,5.8,0-.9-1.3-1.8-3-2.6-5"/>
+          <path class="st3" d="M259.8,129.4c-1.4,1.1-2.3,2.6-2.8,4,1.7,0,3.3,0,4.8,0-.7-1.2-1.4-2.5-2-4.1"/>
+          <path class="st1" d="M299.2,95.9c-.8-.2-1.5-.3-2-.4-.9,1-1.6,2.7,0,5.6.4.7.7,1.1,1,1.4.5-.9.8-1.9.8-1.9,0-.3-1.2-3-.4-3.9.2-.2.6-.7.6-.8"/>
+        </g>
+      </svg>
+    </span>
+    <div class="hd-name">
+      <strong>Le Bistro d'Orsières</strong>
+      <span>Les savoir-faire et les entreprises de la commune</span>
+    </div>
+    <span class="hd-badge">Maquette — annuaire de sources publiques</span>
+  </header>
+
+  <nav class="nav" aria-label="Navigation principale">
+    <button type="button" data-view="carte" aria-pressed="true">La carte des talents</button>
+    <button type="button" data-view="place" aria-pressed="false">La place du village</button>
+    <button type="button" data-view="projets" aria-pressed="false">Les projets</button>
+  </nav>
+
+  <section class="hero">
+    <p class="kick">La place du village, en ligne</p>
+    <h1>Il y a forcément quelqu'un, à Orsières, qui sait faire ça.</h1>
+    <div class="search">
+      <div class="search-box">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#79705c" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+        <input id="q" type="search" placeholder="Un métier, un coup de main, un village…" aria-label="Rechercher un savoir-faire">
+      </div>
+      <button type="button" class="btn btn-red" id="propose">Je propose une idée</button>
+    </div>
+    <p class="meta" id="hero-meta"></p>
+  </section>
+
+  <form class="composer" id="composer" hidden>
+    <label for="idea">Votre idée pour la commune</label>
+    <textarea id="idea" rows="3" placeholder="J'aimerais qu'on organise…" required></textarea>
+    <label for="contrib">Je pourrais contribuer en…</label>
+    <input id="contrib" placeholder="prêtant du matériel, donnant un coup de main…">
+    <div class="row">
+      <button type="submit" class="btn btn-red">Publier sur la place</button>
+      <button type="button" class="btn btn-ghost" id="cancel">Annuler</button>
+    </div>
+  </form>
+
+  <div class="layout">
+    <main id="main" aria-live="polite"></main>
+    <aside>
+      <section>
+        <h2>Juste à côté de chez vous</h2>
+        <p class="sub">Trois savoir-faire à découvrir cette semaine</p>
+        <div id="featured"></div>
+      </section>
+      <section class="cafe">
+        <h2>Et si on en parlait autour d'un café ?</h2>
+        <p>Chaque premier jeudi du mois, les idées de la place se retrouvent au village. Prochain rendez-vous affiché ici.</p>
+        <button type="button" id="meet">Imaginer une rencontre</button>
+      </section>
+      <div id="detail" class="detail" aria-live="polite" hidden></div>
+    </aside>
+  </div>
+
+  <footer class="ft">
+    <p class="villages">Orsières, Champex-Lac, Praz-de-Fort, La Fouly, Issert, Som-la-Proz, Reppaz, Commeire, Soulalex, Prayon, Chez-les-Reuses…</p>
+    <p class="legal">Maquette de démonstration présentée à la Commune d'Orsières. L'annuaire est un relevé de sources publiques au 4 octobre 2026 (fiches du Pays du St-Bernard et sites des prestataires) — coordonnées à confirmer, aucune inscription à ce stade. Les idées, messages et compteurs de « La place » sont simulés, rien n'est enregistré ni envoyé. Espace modéré, charte de la place, hébergement en Suisse.</p>
+  </footer>
+</div>
+
+<script>
+(() => {
+  const ACTEURS = [{"nom":"Archifonfon sa I Bafonfi sàrl  I Immofonfi sàrl","secteur":"Architecture et ingénierie","service":"Architecture, ingénierie, immobilier et 3D","localite":"Orsières","telephone":"079 212 34 61","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/archifonfon-sa-i-bafonfi-sarl-i-immofonfi-sarl-49977/"},{"nom":"Architecture - Alphonse Fellay","secteur":"Architecture et ingénierie","service":"Architecture et génie civil","localite":"Orsières","telephone":"027 783 28 65","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/architecture-alphonse-fellay-5407/"},{"nom":"Architecture - Auguste Gaillard","secteur":"Architecture et ingénierie","service":"Architecture","localite":"Orsières","telephone":"027 783 19 31","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/architecture-auguste-gaillard-7170/"},{"nom":"Architecture - Jean-François Lattion","secteur":"Architecture et ingénierie","service":"Architecture","localite":"Orsières","telephone":"027 783 27 73","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/architecture-jean-francois-lattion-5388/"},{"nom":"Architecture - Maurice Thétaz","secteur":"Architecture et ingénierie","service":"Architecture","localite":"Orsières","telephone":"027 783 17 46","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/architecture-maurice-thetaz-5365/"},{"nom":"Architecture - Stéphane Schers","secteur":"Architecture et ingénierie","service":"Architecture","localite":"Orsières","telephone":"079 631 05 10","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/architecture-stephane-schers-5299/"},{"nom":"Architecture et Constructions Tornay SA","secteur":"Architecture et ingénierie","service":"Architecture et suivi de chantier","localite":"Orsières","telephone":"079 301 16 22","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/architecture-et-constructions-tornay-sa-5348/"},{"nom":"Dirac Design Sàrl","secteur":"Architecture et ingénierie","service":"Architecture et aménagement intérieur","localite":"Orsières","telephone":"078 794 87 28","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/dirac-design-sarl-50288/"},{"nom":"MD - Maison durable SA","secteur":"Architecture et ingénierie","service":"Architecture et rénovation durable","localite":"Orsières","telephone":"027 783 20 00","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/md-maison-durable-sa-50357/"},{"nom":"Silvaplus SA","secteur":"Architecture et ingénierie","service":"Bureau d’ingénieurs","localite":"Orsières","telephone":"027 723 17 07","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/silvaplus-sa-50063/"},{"nom":"Bernhard Claude céramique","secteur":"Artisanat et création","service":"Céramique et création artistique","localite":"Orsières","telephone":"079 213 47 64","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/bernhard-claude-ceramique-4887/"},{"nom":"Coutelier - Pascal Balleys","secteur":"Artisanat et création","service":"Coutellerie","localite":"Reppaz","telephone":"027 783 28 80","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/coutelier-pascal-balleys-5853/"},{"nom":"Céramiste - Georges Steiner","secteur":"Artisanat et création","service":"Céramique","localite":"Orsières","telephone":"027 783 41 45","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/ceramiste-georges-steiner-5776/"},{"nom":"Mon P'tit Monde","secteur":"Artisanat et création","service":"Création de bijoux","localite":"Champex-Lac","telephone":"079 377 05 46","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/mon-ptit-monde-4904/"},{"nom":"New Mosaïque d'Art Sàrl","secteur":"Artisanat et création","service":"Décoration et restauration de monuments","localite":"Champex-Lac","telephone":"027 783 38 66","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/new-mosaique-dart-sarl-5834/"},{"nom":"Alex Auto-école Sàrl","secteur":"Automobile et transports","service":"Auto-école","localite":"Orsières","telephone":"079 666 80 66","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/alex-auto-ecole-sarl-23307/"},{"nom":"Auto-moto école Tissières","secteur":"Automobile et transports","service":"Auto-école et moto-école","localite":"Orsières","telephone":"079 215 33 63","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/auto-moto-ecole-tissieres-6928/"},{"nom":"Carrosserie du Six Blanc","secteur":"Automobile et transports","service":"Carrosserie automobile","localite":"Orsières","telephone":"027 783 16 36","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/carrosserie-du-six-blanc-6177/"},{"nom":"Garage du Carrefour Droz SA","secteur":"Automobile et transports","service":"Garage automobile","localite":"Orsières","telephone":"027 783 10 77","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/garage-du-carrefour-droz-sa-6158/"},{"nom":"Garage du Gd-St-Bernard","secteur":"Automobile et transports","service":"Garage, réparation et dépannage","localite":"Orsières","telephone":"027 783 12 50","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/garage-du-gd-st-bernard-6794/"},{"nom":"Garage du Lac","secteur":"Automobile et transports","service":"Garage","localite":"Champex-Lac","telephone":"027 783 11 47","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/garage-du-lac-6142/"},{"nom":"Garage Eddy Bérard","secteur":"Automobile et transports","service":"Garage automobile","localite":"Orsières","telephone":"027 783 40 00","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/garage-eddy-berard-6780/"},{"nom":"Pneus service - Patrice Richard","secteur":"Automobile et transports","service":"Service de pneus","localite":"Issert","telephone":"027 783 28 72","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/pneus-service-patrice-richard-54571/"},{"nom":"Pneus service - Pierre Tissières","secteur":"Automobile et transports","service":"Pneus et services automobiles","localite":"Orsières","telephone":"027 783 26 06","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/pneus-service-pierre-tissieres-54566/"},{"nom":"Pneus service et transport - Cédric Gabioud","secteur":"Automobile et transports","service":"Pneus et transports","localite":"Orsières","telephone":"078 600 58 18","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/pneus-service-et-transport-cedric-gabioud-7133/"},{"nom":"RL transports","secteur":"Automobile et transports","service":"Transports","localite":"Issert","telephone":"079 486 36 72","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/rl-transports-50180/"},{"nom":"Taxi FEN'YX","secteur":"Automobile et transports","service":"Taxi et transferts","localite":"Orsières","telephone":"079 773 77 40","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/taxi-fenyx-7393/"},{"nom":"Coiffure Chez Irène","secteur":"Coiffure","service":"Coiffure","localite":"Champex-Lac","telephone":"079 668 74 57","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/coiffure-chez-irene-4828/"},{"nom":"Coiffure Mouron Gabrielle","secteur":"Coiffure","service":"Coiffure","localite":"Issert","telephone":"079 658 48 92","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/coiffure-mouron-gabrielle-6073/"},{"nom":"Coiffure Nathalie Tornay","secteur":"Coiffure","service":"Coiffure","localite":"Orsières","telephone":"027 783 13 30","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/coiffure-nathalie-tornay-6053/"},{"nom":"Coiffure Valérie Lovey","secteur":"Coiffure","service":"Coiffure","localite":"Orsières","telephone":"027 783 35 75","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/coiffure-valerie-lovey-6038/"},{"nom":"Expression coiffure","secteur":"Coiffure","service":"Coiffure","localite":"Orsières","telephone":"027 783 11 23","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/expression-coiffure-6018/"},{"nom":"Le Bigoudi Bleu","secteur":"Coiffure","service":"Coiffure","localite":"Orsières","telephone":"027 783 34 11","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/le-bigoudi-bleu-5996/"},{"nom":"Salon de coiffure \"Chez Nadia\"","secteur":"Coiffure","service":"Coiffure","localite":"Orsières","telephone":"027 783 28 78","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/salon-de-coiffure-chez-nadia-50047/"},{"nom":"Design & Copy Services","secteur":"Communication et audiovisuel","service":"Graphisme, sites web et impression","localite":"Orsières","telephone":"027 783 26 20","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/design-copy-services-7054/"},{"nom":"Emke Frerichs - Photographe canin","secteur":"Communication et audiovisuel","service":"Photographie canine","localite":"Orsières","telephone":"076 530 03 91","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/emke-frerichs-photographe-canin-50109/"},{"nom":"HDCam","secteur":"Communication et audiovisuel","service":"Technique événementielle","localite":"Somlaproz","telephone":"079 377 56 38","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/hdcam-49986/"},{"nom":"JHiEL Productions","secteur":"Communication et audiovisuel","service":"Production de spectacles","localite":"Les Arlaches","telephone":"079 835 81 52","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/jhiel-productions-49970/"},{"nom":"Jump Cut Production","secteur":"Communication et audiovisuel","service":"Production audiovisuelle","localite":"Praz-de-Fort","telephone":"079 459 28 28","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/jump-cut-production-50099/"},{"nom":"Mattia Personnalisations","secteur":"Communication et audiovisuel","service":"Personnalisation d’objets","localite":"Orsières","telephone":"078 313 75 41","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/mattia-personnalisations-52535/"},{"nom":"Mélusine Films","secteur":"Communication et audiovisuel","service":"Films documentaires et de fiction","localite":"La Rosière","telephone":"","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/melusine-films-50104/"},{"nom":"Net'Audio SA","secteur":"Communication et audiovisuel","service":"Sonorisation, éclairage et vidéo","localite":"Orsières","telephone":"027 783 16 88","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/netaudio-sa-6110/"},{"nom":"SLP PROD Roserens","secteur":"Communication et audiovisuel","service":"Création de films","localite":"Somlaproz","telephone":"","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/slp-prod-roserens-50166/"},{"nom":"Carrelage Jean-Claude Duay","secteur":"Construction et rénovation","service":"Carrelage","localite":"Somlaproz","telephone":"079 699 68 01","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/carrelage-jean-claude-duay-6700/"},{"nom":"Carrelage Yan Maret","secteur":"Construction et rénovation","service":"Carrelage","localite":"Orsières","telephone":"078 897 58 19","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/carrelage-yan-maret-7346/"},{"nom":"Charly Lovey SA","secteur":"Construction et rénovation","service":"Construction et maçonnerie","localite":"Orsières","telephone":"027 783 23 53","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/charly-lovey-sa-6666/"},{"nom":"Cincotta Fabrice maçonnerie rénovation","secteur":"Construction et rénovation","service":"Maçonnerie et rénovation","localite":"Orsières","telephone":"079 828 60 89","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/cincotta-fabrice-maconnerie-renovation-62933/"},{"nom":"Cincotta Fortunato & Fils","secteur":"Construction et rénovation","service":"Gros œuvre et génie civil","localite":"Orsières","telephone":"027 783 33 23","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/cincotta-fortunato-fils-6653/"},{"nom":"Darbellay Sylvain Terrassement, Construction et génie civil","secteur":"Construction et rénovation","service":"Terrassement et génie civil","localite":"Orsières","telephone":"027 783 37 20","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/darbellay-sylvain-terrassement-construction-et-genie-civil-6618/"},{"nom":"Deladoey Carrelage","secteur":"Construction et rénovation","service":"Carrelage","localite":"La Douay","telephone":"079 667 97 51","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/deladoey-carrelage-50053/"},{"nom":"Florian Lovey SA","secteur":"Construction et rénovation","service":"Gypserie et peinture","localite":"Orsières","telephone":"079 299 96 25","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/florian-lovey-sa-6383/"},{"nom":"Gratien Copt couvreur","secteur":"Construction et rénovation","service":"Couverture de toiture","localite":"Issert","telephone":"027 783 29 63","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/gratien-copt-couvreur-6487/"},{"nom":"Martinal Maçonnerie SA","secteur":"Construction et rénovation","service":"Maçonnerie et rénovation","localite":"Orsières","telephone":"079 290 62 31","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/martinal-maconnerie-sa-6354/"},{"nom":"Paccolat Philippe carrelage","secteur":"Construction et rénovation","service":"Carrelage","localite":"Prassurny","telephone":"079 500 19 30","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/paccolat-philippe-carrelage-6307/"},{"nom":"Petriccioli Constructions SA","secteur":"Construction et rénovation","service":"Construction et rénovation","localite":"Orsières","telephone":"027 783 11 42","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/petriccioli-constructions-sa-6289/"},{"nom":"Tornay Aragne","secteur":"Construction et rénovation","service":"Terrassement en terrains difficiles","localite":"Orsières","telephone":"079 646 34 45","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/tornay-aragne-49961/"},{"nom":"AB Consultpro Sàrl","secteur":"Finance, assurances et droit","service":"Fiduciaire et conseils","localite":"Orsières","telephone":"027 565 20 03","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/ab-consultpro-sarl-50027/"},{"nom":"Armonia Fiduciaire","secteur":"Finance, assurances et droit","service":"Fiduciaire et gestion administrative","localite":"Praz-de-Fort","telephone":"078 756 30 69","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/armonia-fiduciaire-52522/"},{"nom":"Avocate-notaire Véronique Thétaz","secteur":"Finance, assurances et droit","service":"Avocate et notaire","localite":"Orsières","telephone":"027 783 20 45","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/avocate-notaire-veronique-thetaz-6972/"},{"nom":"Banque Raiffeisen de la Vallée d'Entremont","secteur":"Finance, assurances et droit","service":"Services bancaires","localite":"Orsières","telephone":"027 780 10 00","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/banque-raiffeisen-de-la-vallee-dentremont-7022/"},{"nom":"Bâloise Assurances","secteur":"Finance, assurances et droit","service":"Assurances","localite":"Orsières","telephone":"027 783 37 74","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/baloise-assurances-6986/"},{"nom":"Caisse Maladie de la Vallée d'Entremont","secteur":"Finance, assurances et droit","service":"Assurance maladie","localite":"Orsières","telephone":"027 783 25 87","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/caisse-maladie-de-la-vallee-dentremont-6856/"},{"nom":"Fiduciaire de l'Entremont SA","secteur":"Finance, assurances et droit","service":"Comptabilité et fiscalité","localite":"Orsières","telephone":"027 783 22 33","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/fiduciaire-de-lentremont-sa-7087/"},{"nom":"Fiduciaire du St-Bernard","secteur":"Finance, assurances et droit","service":"Comptabilité, fiscalité et révision","localite":"Orsières","telephone":"027 783 15 31","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/fiduciaire-du-st-bernard-7102/"},{"nom":"Alan Tissières","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"Praz-de-Fort","telephone":"079 687 48 06","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Boudewijn van Doorn","secteur":"Guides et randonnée","service":"Randonnée accompagnée","localite":"Champex-Lac","telephone":"078 775 53 70","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Chantal Maudry","secteur":"Guides et randonnée","service":"Randonnée accompagnée","localite":"Les Arlaches","telephone":"027 565 26 46","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Christian Dumont d’Ayot","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"Maligue","telephone":"076 615 87 73","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Daniel Coquoz","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"Soulalex","telephone":"078 734 86 73","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Daniel Troillet","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"La Fouly","telephone":"079 659 98 53","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Jean-Benoît Coppey","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"Somlaproz","telephone":"079 418 78 68","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Jean-Pierre Besse","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"La Rosière","telephone":"079 221 11 21","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Justin Marquis","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"Reppaz","telephone":"079 627 01 16","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Olivier Sarrasin","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"Praz-de-Fort","telephone":"079 669 22 21","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Patricia Joris","secteur":"Guides et randonnée","service":"Randonnée accompagnée","localite":"Orsières","telephone":"079 664 58 33","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Raoul Crettenand","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"Praz-de-Fort","telephone":"079 607 94 23","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"René Buémi","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"Orsières","telephone":"079 219 29 23","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Stéphane Hottinger","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"La Rosière","telephone":"079 261 86 73","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Éric Berclaz","secteur":"Guides et randonnée","service":"Guide de montagne","localite":"Orsières","telephone":"079 218 95 82","source":"https://www.saint-bernard.ch/fr/pratique/guides-et-accompagnateurs-17023/"},{"nom":"Au Club Alpin","secteur":"Hébergement et accueil","service":"Hébergement hôtelier","localite":"Champex-Lac","telephone":"027 780 14 14","source":"https://www.saint-bernard.ch/fr/sejourner/nos-hebergements/au-club-alpin-4946/"},{"nom":"Auberge des Glaciers","secteur":"Hébergement et accueil","service":"Hébergement hôtelier","localite":"La Fouly","telephone":"027 783 11 71","source":"https://www.saint-bernard.ch/fr/sejourner/nos-hebergements/auberge-des-glaciers-5446/"},{"nom":"Hôtel du Glacier","secteur":"Hébergement et accueil","service":"Hébergement hôtelier","localite":"Champex-Lac","telephone":"027 782 61 51","source":"https://www.saint-bernard.ch/fr/sejourner/nos-hebergements/hotel-du-glacier-4880/"},{"nom":"Hôtel Edelweiss","secteur":"Hébergement et accueil","service":"Hébergement hôtelier","localite":"La Fouly","telephone":"027 783 26 21","source":"https://www.saint-bernard.ch/fr/sejourner/nos-hebergements/hotel-edelweiss-4844/"},{"nom":"Hôtel Mont-Lac","secteur":"Hébergement et accueil","service":"Hébergement hôtelier","localite":"Champex-Lac","telephone":"026 565 66 00","source":"https://www.saint-bernard.ch/fr/sejourner/nos-hebergements/hotel-mont-lac-5047/"},{"nom":"Hôtel Terminus","secteur":"Hébergement et accueil","service":"Hébergement hôtelier","localite":"Orsières","telephone":"027 552 11 00","source":"https://www.saint-bernard.ch/fr/sejourner/nos-hebergements/hotel-terminus-5101/"},{"nom":"Montagne Alternative","secteur":"Hébergement et accueil","service":"Hébergement hôtelier","localite":"Commeire","telephone":"079 843 61 65","source":"https://www.saint-bernard.ch/fr/sejourner/nos-hebergements/montagne-alternative-10427/"},{"nom":"Agence immobilière Armand Sarrasin","secteur":"Immobilier","service":"Agence immobilière","localite":"La Fouly / Val Ferret","telephone":"027 783 22 54","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/agence-immobiliere-armand-sarrasin-4931/"},{"nom":"Agence immobilière Maurice Biselx","secteur":"Immobilier","service":"Agence immobilière","localite":"Orsières","telephone":"027 783 20 69","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/agence-immobiliere-maurice-biselx-5142/"},{"nom":"Au Club immobilier SA","secteur":"Immobilier","service":"Agence immobilière","localite":"Champex-Lac","telephone":"027 565 05 65","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/au-club-immobilier-sa-50197/"},{"nom":"Copt Immobilier","secteur":"Immobilier","service":"Agence immobilière","localite":"Praz-de-Fort","telephone":"027 783 29 31","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/copt-immobilier-4948/"},{"nom":"Torn'Immo","secteur":"Immobilier","service":"Accompagnement immobilier","localite":"Orsières","telephone":"078 892 38 65","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/tornimmo-59441/"},{"nom":"DMIS - Daniel Moret Info Service","secteur":"Informatique et sécurité","service":"Réparation PC/Mac et assistance informatique","localite":"Praz-de-Fort","telephone":"079 449 01 30","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/dmis-daniel-moret-info-service-6814/"},{"nom":"Goinfo Sàrl","secteur":"Informatique et sécurité","service":"Vidéosurveillance, alarmes et domotique","localite":"Praz-de-Fort","telephone":"079 925 50 00","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/goinfo-sarl-50312/"},{"nom":"Radio-TV - Martial Darbellay","secteur":"Informatique et sécurité","service":"Radio et télévision","localite":"Orsières","telephone":"027 783 29 80","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/radio-tv-martial-darbellay-6091/"},{"nom":"Terrettaz Informatique","secteur":"Informatique et sécurité","service":"Services et conseils informatiques","localite":"Orsières","telephone":"027 783 50 50","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/terrettaz-informatique-6826/"},{"nom":"Arbolys paysage Sàrl Denis Darbellay","secteur":"Jardins, forêt et entretien","service":"Paysagisme","localite":"Orsières","telephone":"079 604 36 92","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/arbolys-paysage-sarl-denis-darbellay-6366/"},{"nom":"Bûcheron - Denis Ledermann","secteur":"Jardins, forêt et entretien","service":"Travaux forestiers","localite":"Orsières","telephone":"027 783 35 56","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/bucheron-denis-ledermann-5961/"},{"nom":"Bûcheron - Nicolas Coppey","secteur":"Jardins, forêt et entretien","service":"Bûcheronnage","localite":"Somlaproz","telephone":"079 290 34 93","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/bucheron-nicolas-coppey-5976/"},{"nom":"Garden du St-Bernard","secteur":"Jardins, forêt et entretien","service":"Bouquets, fleurs et jardinage","localite":"Orsières","telephone":"079 467 58 52","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/garden-du-st-bernard-38648/"},{"nom":"Micro Clean","secteur":"Jardins, forêt et entretien","service":"Nettoyage et conciergerie","localite":"Champex-Lac","telephone":"078 720 47 57","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/micro-clean-7116/"},{"nom":"Rosemarie Fleurs","secteur":"Jardins, forêt et entretien","service":"Fleuriste","localite":"Orsières","telephone":"027 783 15 69","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/rosemarie-fleurs-6740/"},{"nom":"Artis'Alpes Menuiserie SA","secteur":"Menuiserie et charpente","service":"Menuiserie","localite":"Orsières","telephone":"079 842 44 41","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/artisalpes-menuiserie-sa-6232/"},{"nom":"Copt Jean-Michel Menuiserie","secteur":"Menuiserie et charpente","service":"Menuiserie, chalets et rénovation","localite":"Praz-de-Fort","telephone":"027 783 21 66","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/copt-jean-michel-menuiserie-6634/"},{"nom":"Créations bois SA","secteur":"Menuiserie et charpente","service":"Menuiserie et agencement","localite":"Praz-de-Fort","telephone":"079 398 97 13","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/creations-bois-sa-50120/"},{"nom":"Fernand Cretton et Cie SA","secteur":"Menuiserie et charpente","service":"Menuiserie et ébénisterie","localite":"Orsières","telephone":"027 783 14 45","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/fernand-cretton-et-cie-sa-6559/"},{"nom":"Gaillard et Morand SA","secteur":"Menuiserie et charpente","service":"Menuiserie et charpente","localite":"Orsières","telephone":"079 220 79 63","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/gaillard-et-morand-sa-6524/"},{"nom":"Georges Gabioud et Fils SA","secteur":"Menuiserie et charpente","service":"Charpente et construction bois","localite":"Orsières","telephone":"027 783 35 68","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/georges-gabioud-et-fils-sa-6501/"},{"nom":"Jean-Daniel Lovey - Menuiserie","secteur":"Menuiserie et charpente","service":"Menuiserie","localite":"Chez-les-Reuses","telephone":"079 402 83 24","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/jean-daniel-lovey-menuiserie-50130/"},{"nom":"Jonathan Amiot Menuiserie","secteur":"Menuiserie et charpente","service":"Menuiserie","localite":"Orsières","telephone":"079 644 81 40","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/jonathan-amiot-menuiserie-50022/"},{"nom":"Joël Gaillard SA","secteur":"Menuiserie et charpente","service":"Menuiserie et agencement","localite":"Orsières","telephone":"027 783 53 00","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/joel-gaillard-sa-6412/"},{"nom":"L'Atelier de Fanny","secteur":"Menuiserie et charpente","service":"Menuiserie, rénovation et vieux bois","localite":"La Douay","telephone":"079 817 33 94","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/latelier-de-fanny-6276/"},{"nom":"Lovey Philippe - Menuiserie","secteur":"Menuiserie et charpente","service":"Menuiserie et cuisines","localite":"Orsières","telephone":"027 783 27 36","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/lovey-philippe-menuiserie-6399/"},{"nom":"Maurice Joris SA","secteur":"Menuiserie et charpente","service":"Menuiserie et charpente","localite":"Orsières","telephone":"027 783 11 46","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/maurice-joris-sa-6342/"},{"nom":"Passion Bois","secteur":"Menuiserie et charpente","service":"Rénovation de sols, bois et terrasses","localite":"Champex-Lac","telephone":"079 290 94 05","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/passion-bois-5721/"},{"nom":"Ramzy Bois","secteur":"Menuiserie et charpente","service":"Charpente","localite":"Chez-les-Reuses","telephone":"078 772 74 43","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/ramzy-bois-49994/"},{"nom":"Robert Copt SA","secteur":"Menuiserie et charpente","service":"Menuiserie et charpente","localite":"Orsières","telephone":"027 783 27 55","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/robert-copt-sa-6212/"},{"nom":"Urbain Gaillard Sàrl Ebénisterie","secteur":"Menuiserie et charpente","service":"Ébénisterie et agencement intérieur","localite":"Orsières","telephone":"079 816 45 76","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/urbain-gaillard-sarl-ebenisterie-6198/"},{"nom":"Basile Darbellay  - Dermatologue","secteur":"Santé et bien-être","service":"Dermatologie et vénéréologie","localite":"Orsières","telephone":"027 783 30 60","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/basile-darbellay-dermatologue-50362/"},{"nom":"Dentiste Lorena Marcano","secteur":"Santé et bien-être","service":"Soins dentaires","localite":"Orsières","telephone":"027 783 28 83","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/dentiste-lorena-marcano-5741/"},{"nom":"Escape massage","secteur":"Santé et bien-être","service":"Massages","localite":"Prassurny","telephone":"076 709 19 59","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/escape-massage-63411/"},{"nom":"La Combine à Commeire","secteur":"Santé et bien-être","service":"Centre de soins et bien-être","localite":"Commeire","telephone":"027 565 05 80","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/la-combine-a-commeire-7407/"},{"nom":"Massage shiatsu - Champex-Lac","secteur":"Santé et bien-être","service":"Massage shiatsu","localite":"Champex-Lac","telephone":"078 866 15 05","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/massage-shiatsu-champex-lac-20364/"},{"nom":"O'Physio Sàrl Cabinet de Physiothérapie","secteur":"Santé et bien-être","service":"Physiothérapie","localite":"Orsières","telephone":"027 565 19 37","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/ophysio-sarl-cabinet-de-physiotherapie-63060/"},{"nom":"Ostéopathie - Rébecca Copt à Saleinaz","secteur":"Santé et bien-être","service":"Ostéopathie","localite":"Praz-de-Fort","telephone":"027 783 21 62","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/osteopathie-rebecca-copt-a-saleinaz-6872/"},{"nom":"Pharmacie","secteur":"Santé et bien-être","service":"Pharmacie","localite":"Orsières","telephone":"027 783 13 13","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/pharmacie-6911/"},{"nom":"Physiothérapie Entremont – cabinet d’Orsières","secteur":"Santé et bien-être","service":"Physiothérapie","localite":"Orsières","telephone":"027 565 17 02","source":"https://orsieres.ch/wp-content/uploads/2025/07/2025-2.pdf"},{"nom":"Pédicure - Marie-José Richard","secteur":"Santé et bien-être","service":"Pédicure","localite":"Orsières","telephone":"027 783 28 82","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/pedicure-marie-jose-richard-6889/"},{"nom":"Salon de massage \"Les Aroles\"","secteur":"Santé et bien-être","service":"Massothérapie","localite":"Orsières","telephone":"079 216 87 81","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/salon-de-massage-les-aroles-52529/"},{"nom":"Véronique Darbellay - Massages","secteur":"Santé et bien-être","service":"Massages","localite":"Orsières","telephone":"078 788 79 97","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/veronique-darbellay-massages-50599/"},{"nom":"Cristal Sports","secteur":"Sport et location","service":"Location et vente de matériel sportif","localite":"Orsières","telephone":"027 783 24 40","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/cristal-sports-5912/"},{"nom":"Edelweiss Sports","secteur":"Sport et location","service":"Location de matériel et école de ski","localite":"Champex-Lac","telephone":"027 783 48 18","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/edelweiss-sports-5894/"},{"nom":"Espace ski et montagne","secteur":"Sport et location","service":"Location et vente de matériel de montagne","localite":"Champex-Lac","telephone":"027 783 38 05","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/espace-ski-et-montagne-7377/"},{"nom":"Exoride","secteur":"Sport et location","service":"Location, entretien et sorties VTT","localite":"Chez-les-Addy","telephone":"079 644 59 29","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/exoride-20650/"},{"nom":"Look Sport","secteur":"Sport et location","service":"Matériel sportif et bootfitting","localite":"Champex-Lac","telephone":"027 783 38 00","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/look-sport-6126/"},{"nom":"Quai de l'Ours","secteur":"Sport et location","service":"Location de vélos électriques","localite":"Orsières","telephone":"027 552 11 00","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/quai-de-lours-5219/"},{"nom":"Top Bike - Stéphane Piatti","secteur":"Sport et location","service":"Services et matériel vélo","localite":"Orsières","telephone":"027 783 35 57","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/top-bike-stephane-piatti-6721/"},{"nom":"Zanskar Sport","secteur":"Sport et location","service":"Matériel sportif et location de vélos","localite":"La Fouly / Val Ferret","telephone":"027 783 30 00","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/zanskar-sport-7200/"},{"nom":"Boucherie du St-Bernard SA","secteur":"Traiteur et événements","service":"Boucherie et service traiteur","localite":"Orsières","telephone":"027 783 12 15","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/boucherie-du-st-bernard-sa-5535/"},{"nom":"Boucherie-Traiteur-Boissons BTB SA","secteur":"Traiteur et événements","service":"Boucherie et service traiteur","localite":"Orsières","telephone":"027 783 12 29","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/boucherie-traiteur-boissons-btb-sa-5518/"},{"nom":"Alpera SA","secteur":"Électricité, énergie et sanitaire","service":"Électricité, solaire et chauffage","localite":"Orsières","telephone":"027 783 38 38","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/alpera-sa-7283/"},{"nom":"Alphonse Tornay Sàrl","secteur":"Électricité, énergie et sanitaire","service":"Sanitaire et chauffage","localite":"Orsières","telephone":"079 347 02 81","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/alphonse-tornay-sarl-50297/"},{"nom":"Dransenergie","secteur":"Électricité, énergie et sanitaire","service":"Eau, énergie et ingénierie","localite":"Orsières","telephone":"027 782 63 10","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/dransenergie-7070/"},{"nom":"Grégoire Moulin électricité SA","secteur":"Électricité, énergie et sanitaire","service":"Électricité et électroménager","localite":"Orsières","telephone":"027 783 12 47","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/gregoire-moulin-electricite-sa-7250/"},{"nom":"Iello","secteur":"Électricité, énergie et sanitaire","service":"Installation de panneaux solaires","localite":"Orsières","telephone":"027 564 05 20","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/iello-50333/"},{"nom":"Installations sanitaires Reichenbach","secteur":"Électricité, énergie et sanitaire","service":"Sanitaire et chauffage","localite":"Champex-Lac","telephone":"027 783 15 91","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/installations-sanitaires-reichenbach-6451/"},{"nom":"Jean-Michel Sarrasin SA","secteur":"Électricité, énergie et sanitaire","service":"Ferblanterie, toiture, sanitaire et chauffage","localite":"Orsières","telephone":"027 783 11 70","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/jean-michel-sarrasin-sa-6425/"},{"nom":"Lattion et Associés électricité SA","secteur":"Électricité, énergie et sanitaire","service":"Électricité et dépannage électroménager","localite":"Orsières","telephone":"027 783 24 12","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/lattion-et-associes-electricite-sa-7234/"},{"nom":"Monnay Electricité","secteur":"Électricité, énergie et sanitaire","service":"Installations électriques","localite":"Orsières","telephone":"024 485 17 79","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/monnay-electricite-50058/"},{"nom":"Pierre-Michel Duay électricité","secteur":"Électricité, énergie et sanitaire","service":"Installations électriques","localite":"Orsières","telephone":"027 783 18 18","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/pierre-michel-duay-electricite-7266/"},{"nom":"Rausis-Tornay SA","secteur":"Électricité, énergie et sanitaire","service":"Ferblanterie, sanitaire et chauffage","localite":"Orsières","telephone":"027 783 22 68","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/rausis-tornay-sa-6251/"},{"nom":"Vermillet Yann Sanitaire Sàrl","secteur":"Électricité, énergie et sanitaire","service":"Installations sanitaires","localite":"Orsières","telephone":"","source":"https://www.saint-bernard.ch/fr/pratique/adresses-utiles/vermillet-yann-sanitaire-sarl-50273/"}];
+
+  const POSTS = [
+    {name:'Claire', village:'Orsières', kind:'Une idée', title:"Et si on lançait un atelier de réparation ?", text:"Vélos, petits appareils, vêtements… On a sûrement les talents dans la commune. Qui serait partant pour une première matinée ?", action:'Je suis partant', count:8, joined:false, project:true, open:false, replies:[
+      {name:'Michel', village:'La Fouly', text:"Bonne idée ! Je peux amener mes outils et m'occuper des vélos."},
+      {name:'Hélène', village:'Prayon', text:"La salle de Podemainge se loue auprès de la commune, je me renseigne pour une date."}
+    ]},
+    {name:'Marie', village:'Issert', kind:'Une idée', title:"Une fournée commune au four d'Issert ?", text:"Je prépare le levain, chacun amène sa pâte, et on partage le four un samedi matin.", action:'Je suis partant', count:5, joined:false, project:true, open:false, replies:[
+      {name:'Georges', village:'Chez-les-Reuses', text:"Le four banal chauffe encore très bien — je peux montrer comment le mener."}
+    ]},
+    {name:'Julien', village:'Orsières', kind:'Un coup de main', title:"Qui peut aider notre société avec son site ?", text:"Nous cherchons quelqu'un du coin pour remettre notre agenda à jour et nous montrer comment faire.", action:'Je peux aider', count:2, joined:false, project:false, open:false, replies:[
+      {name:'Théo', village:'Orsières', text:"Je passe mercredi soir si vous voulez, on regarde ça ensemble."}
+    ]},
+    {name:'Samir', village:'Praz-de-Fort', kind:'Un savoir-faire', title:"Je peux vous apprendre à entretenir votre vélo", text:"Changer une chambre à air, régler les freins… Si ça vous intéresse, on organise un petit atelier ensemble.", action:"Ça m'intéresse", count:5, joined:false, project:true, open:false, replies:[]}
+  ];
+
+  const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const norm = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+
+  const SECTEURS = [...new Set(ACTEURS.map(a => a.secteur))].sort((a,b) => a.localeCompare(b,'fr'));
+  const colorOf = s => 'c' + (SECTEURS.indexOf(s) % 6);
+  const LOCALITES = new Set(ACTEURS.map(a => a.localite));
+
+  const app = document.getElementById('app');
+  const main = document.getElementById('main');
+  const detail = document.getElementById('detail');
+  const q = document.getElementById('q');
+  let view = 'carte';
+  let cat = 'all';
+
+  document.getElementById('hero-meta').textContent =
+    ACTEURS.length + ' acteurs économiques recensés dans ' + SECTEURS.length + ' secteurs et ' +
+    LOCALITES.size + ' localités de la commune — relevé de sources publiques, que les habitants pourront compléter.';
+
+  function matches(a, query){
+    if(!query) return true;
+    const hay = norm([a.nom, a.service, a.localite, a.secteur].join(' '));
+    return norm(query).split(/\s+/).every(w => hay.includes(w));
+  }
+
+  function mark(text, query){
+    if(!query) return esc(text);
+    const n = norm(text);
+    for(const w of norm(query).split(/\s+/)){
+      const i = n.indexOf(w);
+      if(i >= 0) return esc(text.slice(0,i)) + '<span class="hl">' + esc(text.slice(i, i+w.length)) + '</span>' + esc(text.slice(i+w.length));
+    }
+    return esc(text);
+  }
+
+  function renderCarte(){
+    const query = q.value.trim();
+    const pool = ACTEURS.filter(a => (cat === 'all' || a.secteur === cat) && matches(a, query));
+    const chips = ['all', ...SECTEURS].map(c =>
+      '<button type="button" data-cat="' + esc(c) + '" aria-pressed="' + String(c === cat) + '">' +
+      (c === 'all' ? 'Tous les secteurs' : esc(c)) + '</button>'
+    ).join('');
+
+    let body = '';
+    for(const s of SECTEURS){
+      const group = pool.filter(a => a.secteur === s).sort((a,b) => a.nom.localeCompare(b.nom,'fr'));
+      if(!group.length) continue;
+      body += '<h3 data-c="' + colorOf(s) + '">' + esc(s) + ' <small class="text-n">' + group.length + '</small></h3>' +
+        group.map(a => {
+          const i = ACTEURS.indexOf(a);
+          return '<button type="button" class="prow" data-person="' + i + '">' +
+            '<span class="metier">' + mark(a.nom, query) + '</span>' +
+            '<span class="dots" aria-hidden="true"></span>' +
+            '<span class="who">' + mark(a.service, query) + ' — ' + mark(a.localite, query) + '</span>' +
+            '</button>';
+        }).join('');
+    }
+    if(!body){
+      body = '<p class="carte-empty">Personne ne propose encore « ' + esc(query) + ' » — ce sera peut-être la première inscription du réseau.</p>';
+    }
+
+    main.innerHTML =
+      '<div class="sec-top"><h2>La carte des savoir-faire</h2><small>' + pool.length + ' acteurs affichés</small></div>' +
+      '<div class="chips" role="group" aria-label="Filtrer par secteur">' + chips + '</div>' +
+      '<div class="carte">' + body +
+      '<div class="carte-add"><button type="button" class="btn btn-ghost" id="add-skill">Inscrire mon savoir-faire</button></div></div>';
+  }
+
+  function thread(p, i){
+    return '<div class="thread">' +
+      p.replies.map(r =>
+        '<div class="reply"><span class="avatar">' + esc(r.name[0]) + '</span>' +
+        '<div><strong>' + esc(r.name) + '</strong> <small>' + esc(r.village) + '</small>' +
+        '<p>' + esc(r.text) + '</p></div></div>'
+      ).join('') +
+      (p.replies.length ? '' : '<p class="thread-empty">Personne n\'a encore répondu — lancez la discussion.</p>') +
+      '<form class="reply-form" data-reply="' + i + '">' +
+      '<textarea rows="2" placeholder="Répondre aux voisins… (démo, rien n\'est envoyé)" required aria-label="Votre réponse"></textarea>' +
+      '<button type="submit" class="btn btn-red">Répondre</button></form></div>';
+  }
+
+  function postCard(p, i, withStatus){
+    const n = p.replies.length;
+    const talk = n ? n + (n > 1 ? ' réponses' : ' réponse') : 'Ouvrir la discussion';
+    return '<article class="post"><div class="post-head">' +
+      '<span class="avatar">' + esc(p.name[0]) + '</span>' +
+      '<div class="a"><strong>' + esc(p.name) + '</strong><small>' + esc(p.village) + '</small></div>' +
+      '<span class="kind">' + esc(p.kind) + '</span></div>' +
+      '<h3><button type="button" class="post-open" data-thread="' + i + '" aria-expanded="' + p.open + '">' + esc(p.title) + '</button></h3>' +
+      '<p>' + esc(p.text) + '</p>' +
+      '<div class="act"><button type="button" class="join" data-join="' + i + '" aria-pressed="' + p.joined + '">' +
+      (p.joined ? '✓ Vous participez' : esc(p.action)) + '</button>' +
+      '<button type="button" class="talk" data-thread="' + i + '">' + talk + '</button>' +
+      '<small>' + p.count + ' personnes intéressées (exemple simulé)</small></div>' +
+      (withStatus ? '<div class="status">À organiser — recherche de participants et de compétences</div>' : '') +
+      (p.open ? thread(p, i) : '') +
+      '</article>';
+  }
+
+  function renderPlace(){
+    main.innerHTML =
+      '<div class="sec-top"><h2>On en parle sur la place</h2><small>Idées, coups de main, savoir-faire — exemples</small></div>' +
+      POSTS.map((p,i) => postCard(p, i, false)).join('');
+  }
+
+  function renderProjets(){
+    main.innerHTML =
+      '<div class="sec-top"><h2>Des idées à faire grandir</h2><small>Rejoignez un projet du village — exemples</small></div>' +
+      POSTS.map((p,i) => p.project ? postCard(p, i, true) : '').join('');
+  }
+
+  function render(){
+    document.querySelectorAll('.nav [data-view]').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+    if(view === 'carte') renderCarte();
+    else if(view === 'projets') renderProjets();
+    else renderPlace();
+  }
+
+  function pick(fragment){
+    return ACTEURS.find(a => norm(a.nom).includes(norm(fragment))) || ACTEURS[0];
+  }
+
+  function renderFeatured(){
+    const picks = [pick('Atelier de Fanny'), pick('Top Bike'), pick('Alan Tissières')];
+    document.getElementById('featured').innerHTML = picks.map(a => {
+      const i = ACTEURS.indexOf(a);
+      return '<button type="button" class="mini" data-person="' + i + '">' +
+        '<span class="avatar">' + esc(a.nom[0]) + '</span>' +
+        '<span><strong>' + esc(a.nom) + '</strong><small>' + esc(a.service) + ' — ' + esc(a.localite) + '</small></span>' +
+        '</button>';
+    }).join('');
+  }
+
+  function showProfile(i){
+    const a = ACTEURS[i];
+    detail.hidden = false;
+    let tel = '';
+    if(a.telephone){
+      tel = '<p><a href="tel:+41' + a.telephone.replace(/\D/g,'').slice(1) + '">' + esc(a.telephone) + '</a> (numéro public)</p>';
+    }
+    detail.innerHTML =
+      '<p class="kick">' + esc(a.localite) + '</p>' +
+      '<h3>' + esc(a.nom) + '</h3>' +
+      '<p>' + esc(a.service) + '</p>' +
+      '<span class="tag tag-ent">' + esc(a.secteur) + '</span>' +
+      tel +
+      '<p><a href="' + esc(a.source) + '" target="_blank" rel="noopener noreferrer">Voir la fiche source</a></p>' +
+      '<form><label for="msg">Entrer en contact via la place</label>' +
+      '<textarea id="msg" rows="2" placeholder="Bonjour, j\'aimerais…" required></textarea>' +
+      '<button type="submit" class="btn btn-red">Envoyer le message</button>' +
+      '<p class="fb" aria-live="polite"></p></form>';
+    detail.querySelector('form').addEventListener('submit', e => {
+      e.preventDefault();
+      detail.querySelector('.fb').textContent = "Message simulé — rien n'a été envoyé. Dans la vraie version, le prestataire le recevrait par e-mail après avoir confirmé sa fiche.";
+    });
+    if(window.innerWidth < 820) detail.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  app.addEventListener('click', e => {
+    const nav = e.target.closest('.nav [data-view]');
+    if(nav){ view = nav.dataset.view; render(); return; }
+    const chip = e.target.closest('[data-cat]');
+    if(chip){ cat = chip.dataset.cat; renderCarte(); return; }
+    const th = e.target.closest('[data-thread]');
+    if(th){
+      const p = POSTS[Number(th.dataset.thread)];
+      p.open = !p.open; render(); return;
+    }
+    const person = e.target.closest('[data-person]');
+    if(person){ showProfile(Number(person.dataset.person)); return; }
+    const join = e.target.closest('[data-join]');
+    if(join){
+      const p = POSTS[Number(join.dataset.join)];
+      p.joined = !p.joined; p.count += p.joined ? 1 : -1;
+      render(); return;
+    }
+    if(e.target.closest('#add-skill')){
+      detail.hidden = false;
+      detail.innerHTML = '<p class="kick">Nouveau profil</p><h3>Inscrire un savoir-faire</h3><p>Dans la vraie version : les entreprises confirment et complètent leur fiche, et les habitants inscrivent leurs savoir-faire — entraide ou prestation. Chaque fiche passe par la modération avant publication.</p>';
+      if(window.innerWidth < 820) detail.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+  });
+
+  app.addEventListener('submit', e => {
+    const f = e.target.closest('[data-reply]');
+    if(!f) return;
+    e.preventDefault();
+    const t = f.querySelector('textarea').value.trim();
+    if(!t) return;
+    const p = POSTS[Number(f.dataset.reply)];
+    p.replies.push({name:'Vous', village:'Orsières', text:t});
+    p.open = true;
+    render();
+  });
+
+  q.addEventListener('input', () => {
+    if(view !== 'carte'){ view = 'carte'; }
+    render();
+  });
+
+  const composer = document.getElementById('composer');
+  document.getElementById('propose').addEventListener('click', () => {
+    composer.hidden = false; document.getElementById('idea').focus();
+  });
+  document.getElementById('cancel').addEventListener('click', () => {
+    composer.hidden = true; document.getElementById('propose').focus();
+  });
+  document.getElementById('meet').addEventListener('click', () => {
+    composer.hidden = false;
+    document.getElementById('idea').value = 'Un café pour faire connaissance et échanger nos idées';
+    document.getElementById('idea').focus();
+  });
+  composer.addEventListener('submit', e => {
+    e.preventDefault();
+    const title = document.getElementById('idea').value.trim();
+    if(!title) return;
+    const contrib = document.getElementById('contrib').value.trim();
+    POSTS.unshift({name:'Vous', village:'Orsières', kind:'Une idée', title,
+      text: contrib ? 'Je peux contribuer : ' + contrib : 'Je cherche des voisins pour imaginer ce projet ensemble.',
+      action:'Je suis partant', count:0, joined:false, project:true});
+    view = 'place'; composer.hidden = true; composer.reset(); render();
+  });
+
+  renderFeatured();
+  render();
+})();
+</script>
+</body>
+</html>

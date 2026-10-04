@@ -38,7 +38,14 @@ small{font-size:12.5px}
 
 /* ---------- header ---------- */
 .hd{display:flex;align-items:center;gap:16px;padding:22px 32px;border-bottom:1px solid var(--line);background:#fff}
-.hd-logo svg{display:block;height:52px;width:auto}
+.hd-logo{border:0;background:transparent;padding:2px;cursor:pointer;border-radius:10px}
+.hd-logo svg{display:block;height:52px;width:auto;transition:transform .18s ease}
+.hd-logo:hover svg,.hd-logo:focus-visible svg{transform:scale(1.06)}
+.logo-big{text-align:center;padding:4px 0 2px}
+.logo-big svg{display:block;height:min(58vh,480px);width:auto;margin:0 auto;filter:drop-shadow(0 10px 24px rgb(43 34 20 / 18%))}
+.logo-big .lb-cap{font-family:var(--serif);font-size:20px;margin:16px 0 2px}
+.logo-big small{color:var(--muted)}
+@media(prefers-reduced-motion:reduce){.hd-logo svg{transition:none}}
 .hd-name{flex:1;min-width:0}
 .hd-name strong{display:block;font-family:var(--serif);font-weight:400;font-size:27px;letter-spacing:-.3px;line-height:1.1}
 .hd-name span{display:block;color:var(--muted);font-size:13px;margin-top:3px}
@@ -245,7 +252,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
 <div id="app">
 
   <header class="hd">
-    <span class="hd-logo" aria-hidden="true">
+    <button type="button" class="hd-logo" id="logo-btn" aria-label="Afficher les armoiries d'Orsières en grand">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 547.4 704.6" role="img" aria-label="Armoiries de la commune d'Orsières">
         <defs><style>.st0{fill:#ab001e}.st1{fill:#c1001f}.st2{fill:#fff}.st3{fill:#262427}</style></defs>
         <path class="st2" d="M273.7,0H0v361.3c0,99.6,43.1,194.7,119,259.3,75.9,64.6,154.7,84.1,154.7,84.1,0,0,83.7-20.7,161.7-90.2,71.6-63.8,112-155.6,112-251.5V0h-273.7Z"/>
@@ -314,7 +321,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
           <path class="st1" d="M299.2,95.9c-.8-.2-1.5-.3-2-.4-.9,1-1.6,2.7,0,5.6.4.7.7,1.1,1,1.4.5-.9.8-1.9.8-1.9,0-.3-1.2-3-.4-3.9.2-.2.6-.7.6-.8"/>
         </g>
       </svg>
-    </span>
+    </button>
     <div class="hd-name">
       <strong>Le Bistro d'Orsières</strong>
       <span>Les savoir-faire et les entreprises de la commune</span>
@@ -846,8 +853,16 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   }
 
   // ---- clics ----
+  function openLogo(){
+    const svg = document.querySelector('#logo-btn svg').outerHTML;
+    openModal('<div class="logo-big">' + svg +
+      '<p class="lb-cap">Commune d\'Orsières</p>' +
+      "<small>Le Bistro porte les couleurs du village — l'ours veille sur la place.</small></div>");
+  }
+
   app.addEventListener('click', e => {
     if(e.target.closest('[data-close]')){ closeModal(); return; }
+    if(e.target.closest('#logo-btn')){ openLogo(); return; }
     const nav = e.target.closest('.nav [data-view]');
     if(nav){
       view = nav.dataset.view; render();

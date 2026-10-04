@@ -84,11 +84,19 @@ main{min-width:0}
 .chips button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
 .carte{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 24px 20px;margin-top:12px}
 .carte h3{font-family:var(--serif);font-weight:400;font-size:19px;color:var(--red-ink);margin:22px 0 4px;padding-bottom:7px;border-bottom:1px solid var(--line)}
-.prow{display:flex;align-items:baseline;gap:4px;width:100%;border:0;background:transparent;text-align:left;padding:11px 2px;border-radius:6px}
+.prow{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;width:100%;border:0;background:transparent;text-align:left;padding:11px 2px;border-radius:6px}
 .prow:hover .metier{color:var(--red-ink)}
 .prow .metier{font-family:var(--serif);font-size:17px;flex-shrink:0}
 .prow .dots{flex:1;min-width:24px;border-bottom:2px dotted var(--line);transform:translateY(-5px);margin:0 10px}
 .prow .who{color:var(--muted);white-space:nowrap}
+.hrs-chip{flex-basis:100%;color:var(--caramel-ink);font-size:12.5px;margin-top:1px;padding-left:2px}
+.hrsline{color:var(--muted);font-size:13.5px;margin:10px 0 4px}
+.hrsline strong{color:var(--ink)}
+.sujet-top{margin-bottom:13px}
+.sujet-h{font-family:var(--serif);font-weight:400;font-size:25px;letter-spacing:-.3px;margin:2px 0 9px}
+.disc-h{font-family:var(--serif);font-weight:400;font-size:18px;margin:20px 0 0}
+.alink{all:unset;cursor:pointer;color:var(--red-ink);font-weight:600;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.m-fixed{display:block;margin-top:7px;font-family:var(--serif);font-size:16px}
 .tag{font-size:11.5px;font-weight:600;border-radius:5px;padding:3px 7px;margin-left:10px;flex-shrink:0}
 .tag-ent{background:var(--panel);color:var(--ink)}
 .tag-pro{background:var(--red-wash);color:var(--caramel-ink)}
@@ -199,6 +207,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
 .notif .dot{width:8px;height:8px;border-radius:50%;background:var(--red);margin-top:7px;flex-shrink:0}
 .notif.read .dot{background:var(--line)}
 .notif small{color:var(--muted);display:block;margin-top:2px}
+@media(max-width:820px){.nav{position:sticky;top:0;z-index:30;background:#fff;box-shadow:0 1px 0 var(--line)}main{scroll-margin-top:62px}.hero{padding:26px 20px 24px}}
 @media(max-width:560px){.hd{flex-wrap:wrap}.hd-auth{margin-left:auto}.modal-card{margin:4vh 10px}}
 
 /* ---------- footer ---------- */
@@ -313,7 +322,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   </header>
 
   <nav class="nav" aria-label="Navigation principale">
-    <button type="button" data-view="carte" aria-pressed="true">La carte des talents</button>
+    <button type="button" data-view="carte" aria-pressed="true">Métiers / talents</button>
     <button type="button" data-view="place" aria-pressed="false">La place du village</button>
     <button type="button" data-view="projets" aria-pressed="false">Les projets</button>
     <button type="button" data-view="espace" aria-pressed="false" id="nav-espace" hidden>Mon espace</button>
@@ -392,13 +401,14 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
      members:['Julien','Théo'], meets:[], replies:[
       {name:'Théo', village:'Orsières', text:"Je passe mercredi soir si vous voulez, on regarde ça ensemble."}
     ]},
-    {name:'Samir', village:'Praz-de-Fort', kind:'Un savoir-faire', title:"Je peux vous apprendre à entretenir votre vélo", text:"Changer une chambre à air, régler les freins… Si ça vous intéresse, on organise un petit atelier ensemble.", action:"Ça m'intéresse", project:true, open:false,
-     members:['Samir','Alice','Luc','Bernard','Michel'], meets:[], replies:[]}
+    {name:'Stéphane', village:'Orsières', kind:'Un savoir-faire', acteur:'Top Bike', title:"Je peux vous apprendre à entretenir votre vélo", text:"Changer une chambre à air, régler les freins… Si ça vous intéresse, on organise un petit atelier ensemble.", action:"Ça m'intéresse", project:true, open:false,
+     members:['Stéphane','Alice','Luc','Bernard','Michel'], meets:[], replies:[]}
   ];
 
   const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const norm = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 
+  ACTEURS.forEach(a => { if(a.horaire == null) a.horaire = ''; });
   const SECTEURS = [...new Set(ACTEURS.map(a => a.secteur))].sort((a,b) => a.localeCompare(b,'fr'));
   const colorOf = s => 'c' + (SECTEURS.indexOf(s) % 6);
   const LOCALITES = new Set(ACTEURS.map(a => a.localite));
@@ -421,6 +431,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   const modalBody = document.getElementById('modal-body');
   let view = 'carte';
   let cat = 'all';
+  let sujetId = null;
 
   const isMember = p => !!ME && p.members.includes('Vous');
   const unread = () => NOTIFS.filter(n => !n.read).length;
@@ -480,6 +491,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
     const p = pending; pending = null;
     if(p && p.type === 'join'){ toggleMember(p.i); }
     else if(p && p.type === 'meet'){ openMeet(); return; }
+    else if(p && p.type === 'meetFor'){ openMeet(p.i); return; }
     else if(p && p.type === 'bell'){ view = 'espace'; espaceTab = 'notifs'; }
     render();
   }
@@ -493,7 +505,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   }
 
   // ---- rencontre au bistro ----
-  function openMeet(){
+  function openMeet(fixed){
     const projets = POSTS.map((p,i) => p.project ? '<option value="' + i + '">' + esc(p.title) + '</option>' : '').join('');
     const lieux = LIEUX.map((l,i) => '<option value="' + i + '">' + esc(l.nom) + ' — ' + esc(l.loc) + '</option>').join('');
     const d = new Date(Date.now() + 4*864e5).toISOString().slice(0,10);
@@ -501,7 +513,9 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
       '<h3>Proposer une rencontre</h3>' +
       '<p class="sub">Les projets commencent en ligne et se concluent autour d\'une table de la commune.</p>' +
       '<form data-form="meet">' +
-      '<label>Pour le projet<select id="m-projet">' + projets + '</select></label>' +
+      (fixed != null ?
+        '<label>Pour le projet<input type="hidden" id="m-projet" value="' + fixed + '"><span class="m-fixed">' + esc(POSTS[fixed].title) + '</span></label>' :
+        '<label>Pour le projet<select id="m-projet">' + projets + '</select></label>') +
       '<label>Lieu de rencontre<select id="m-lieu">' + lieux + '</select></label>' +
       '<label>Date<input type="date" id="m-date" value="' + d + '" min="' + new Date().toISOString().slice(0,10) + '" required></label>' +
       '<label>Heure<input type="time" id="m-heure" value="18:30" required></label>' +
@@ -520,7 +534,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   // ---- recherche / carte ----
   function matches(a, query){
     if(!query) return true;
-    const hay = norm([a.nom, a.service, a.localite, a.secteur].join(' '));
+    const hay = norm([a.nom, a.service, a.localite, a.secteur, a.horaire].join(' '));
     return norm(query).split(/\s+/).every(w => hay.includes(w));
   }
   function mark(text, query){
@@ -550,6 +564,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
             '<span class="metier">' + mark(a.nom, query) + '</span>' +
             '<span class="dots" aria-hidden="true"></span>' +
             '<span class="who">' + mark(a.service, query) + ' — ' + mark(a.localite, query) + '</span>' +
+            (a.horaire ? '<span class="hrs-chip">' + esc(a.horaire) + '</span>' : '') +
             '</button>';
         }).join('');
     }
@@ -557,17 +572,17 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
       body = '<p class="carte-empty">Personne ne propose encore « ' + esc(query) + ' » — ce sera peut-être la première inscription du réseau.</p>';
     }
     main.innerHTML =
-      '<div class="sec-top"><h2>La carte des savoir-faire</h2><small>' + pool.length + ' acteurs affichés</small></div>' +
+      '<div class="sec-top"><h2>Métiers / talents</h2><small>' + pool.length + ' acteurs affichés</small></div>' +
       '<div class="chips" role="group" aria-label="Filtrer par secteur">' + chips + '</div>' +
       '<div class="carte">' + body +
       '<div class="carte-add"><button type="button" class="btn btn-ghost" id="add-skill">Inscrire mon savoir-faire</button></div></div>';
   }
 
   // ---- posts, membres, rencontres, fils ----
-  function membersRow(p){
-    const names = p.members.slice(0,4).join(', ') + (p.members.length > 4 ? '…' : '');
+  function membersRow(p, full){
+    const names = full ? p.members.join(', ') : (p.members.slice(0,4).join(', ') + (p.members.length > 4 ? '…' : ''));
     return '<div class="members">' +
-      p.members.slice(0,5).map(n => '<span class="avatar">' + esc(n[0]) + '</span>').join('') +
+      p.members.slice(0, full ? 8 : 5).map(n => '<span class="avatar">' + esc(n[0]) + '</span>').join('') +
       '<small>' + p.members.length + ' participant' + (p.members.length > 1 ? 's' : '') + ' : ' + esc(names) + '</small></div>';
   }
 
@@ -613,15 +628,14 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
       '<span class="avatar">' + esc(p.name[0]) + '</span>' +
       '<div class="a"><strong>' + esc(p.name) + '</strong><small>' + esc(p.village) + '</small></div>' +
       '<span class="kind">' + esc(p.kind) + '</span></div>' +
-      '<h3><button type="button" class="post-open" data-thread="' + i + '" aria-expanded="' + p.open + '">' + esc(p.title) + '</button></h3>' +
+      '<h3><button type="button" class="post-open" data-sujet="' + i + '">' + esc(p.title) + '</button></h3>' +
       '<p>' + esc(p.text) + '</p>' +
       membersRow(p) +
       p.meets.map((m,j) => meetBlock(m, i, j)).join('') +
       '<div class="act"><button type="button" class="join" data-join="' + i + '" aria-pressed="' + isMember(p) + '">' +
       (isMember(p) ? '✓ Vous participez' : esc(p.action)) + '</button>' +
-      '<button type="button" class="talk" data-thread="' + i + '">' + talk + '</button></div>' +
+      '<button type="button" class="talk" data-sujet="' + i + '">' + talk + '</button></div>' +
       (withStatus ? '<div class="status">À organiser — recherche de participants et de compétences</div>' : '') +
-      (p.open ? thread(p, i) : '') +
       '</article>';
   }
 
@@ -693,10 +707,39 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
     updateHeader();
   }
 
+  function openSujet(i){
+    sujetId = i; view = 'sujet'; render();
+    main.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function renderSujet(){
+    const i = sujetId, p = POSTS[i];
+    if(p == null){ view = 'place'; renderPlace(); return; }
+    const ai = p.acteur ? ACTEURS.findIndex(a => norm(a.nom).includes(norm(p.acteur))) : -1;
+    const who = esc(p.name) + (ai >= 0 ? ' · <button type="button" class="alink" data-person="' + ai + '">' + esc(ACTEURS[ai].nom) + ' — voir sa fiche</button>' : '');
+    main.innerHTML =
+      '<div class="sujet-top"><button type="button" class="btn btn-ghost" data-view-back>&larr; Retour à la place</button></div>' +
+      '<article class="post">' +
+      '<div class="post-head"><span class="avatar">' + esc(p.name[0]) + '</span>' +
+      '<div class="a"><strong>' + who + '</strong><small>' + esc(p.village) + '</small></div>' +
+      '<span class="kind">' + esc(p.kind) + '</span></div>' +
+      '<h2 class="sujet-h">' + esc(p.title) + '</h2>' +
+      '<p>' + esc(p.text) + '</p>' +
+      '<div class="act"><button type="button" class="join" data-join="' + i + '" aria-pressed="' + isMember(p) + '">' +
+      (isMember(p) ? '✓ Vous participez' : esc(p.action)) + '</button>' +
+      (p.project ? '<button type="button" class="btn btn-ghost" data-meet-for="' + i + '">Proposer une rencontre au bistro</button>' : '') +
+      '</div>' +
+      membersRow(p, true) +
+      p.meets.map((m,j) => meetBlock(m, i, j)).join('') +
+      '<h3 class="disc-h">Discussion</h3>' + thread(p, i) +
+      '</article>';
+  }
+
   function render(){
     document.querySelectorAll('.nav [data-view]').forEach(b =>
       b.setAttribute('aria-pressed', String(b.dataset.view === view)));
     if(view === 'carte') renderCarte();
+    else if(view === 'sujet') renderSujet();
     else if(view === 'projets') renderProjets();
     else if(view === 'espace') renderEspace();
     else renderPlace();
@@ -730,6 +773,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
       '<h3>' + esc(a.nom) + '</h3>' +
       '<p>' + esc(a.service) + '</p>' +
       '<span class="tag tag-ent">' + esc(a.secteur) + '</span>' +
+      '<p class="hrsline"><strong>Horaires</strong><br>' + (a.horaire ? esc(a.horaire) : 'À confirmer — renseignés par le prestataire à la validation de sa fiche.') + '</p>' +
       tel +
       '<p><a href="' + esc(a.source) + '" target="_blank" rel="noopener noreferrer">Voir la fiche source</a></p>' +
       '<form><label for="msg">Entrer en contact via la place</label>' +
@@ -747,13 +791,24 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   app.addEventListener('click', e => {
     if(e.target.closest('[data-close]')){ closeModal(); return; }
     const nav = e.target.closest('.nav [data-view]');
-    if(nav){ view = nav.dataset.view; render(); return; }
+    if(nav){
+      view = nav.dataset.view; render();
+      if(window.innerWidth < 821) main.scrollIntoView({behavior:'smooth', block:'start'});
+      return;
+    }
     const tab = e.target.closest('[data-tab]');
     if(tab){ espaceTab = tab.dataset.tab; renderEspace(); return; }
     const chip = e.target.closest('[data-cat]');
     if(chip){ cat = chip.dataset.cat; renderCarte(); return; }
-    const th = e.target.closest('[data-thread]');
-    if(th){ const p = POSTS[Number(th.dataset.thread)]; p.open = !p.open; render(); return; }
+    const su = e.target.closest('[data-sujet]');
+    if(su){ openSujet(Number(su.dataset.sujet)); return; }
+    if(e.target.closest('[data-view-back]')){ view = 'place'; render(); return; }
+    const mf = e.target.closest('[data-meet-for]');
+    if(mf){
+      const i = Number(mf.dataset.meetFor);
+      if(!ME){ openLogin({type:'meetFor', i:i}); return; }
+      openMeet(i); return;
+    }
     if(e.target.closest('[data-login]')){ openLogin(null); return; }
     const join = e.target.closest('[data-join]');
     if(join){
@@ -818,7 +873,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
       p.meets.push(meet);
       if(!isMember(p)) p.members.push('Vous');
       pushNotif('Invitation envoyée aux ' + p.members.length + ' participants de « ' + p.title + ' »');
-      closeModal(); view = 'projets'; p.open = false; render();
+      closeModal(); sujetId = i; view = 'sujet'; render();
       setTimeout(() => {
         ['Claire','Michel'].forEach(n => { if(!meet.oui.includes(n)) meet.oui.push(n); });
         pushNotif('Claire et Michel ont répondu présent à votre rencontre');

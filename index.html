@@ -93,9 +93,9 @@ main{min-width:0}
 .carte h3{font-family:var(--serif);font-weight:400;font-size:19px;color:var(--red-ink);margin:22px 0 4px;padding-bottom:7px;border-bottom:1px solid var(--line)}
 .prow{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;width:100%;border:0;background:transparent;text-align:left;padding:11px 2px;border-radius:6px}
 .prow:hover .metier{color:var(--red-ink)}
-.prow .metier{font-family:var(--serif);font-size:17px;flex-shrink:0}
+.prow .metier{font-family:var(--serif);font-size:17px;flex:0 1 auto;min-width:0;overflow-wrap:break-word}
 .prow .dots{flex:1;min-width:24px;border-bottom:2px dotted var(--line);transform:translateY(-5px);margin:0 10px}
-.prow .who{color:var(--muted);white-space:nowrap}
+.prow .who{color:var(--muted);min-width:0;text-align:right;overflow-wrap:break-word}
 .f-card{padding-top:0}
 .f-head{position:relative;margin:0 -22px}
 .f-coverwrap{height:160px;overflow:hidden;border-radius:12px 12px 0 0}
@@ -106,6 +106,10 @@ main{min-width:0}
 .statut{display:inline-block;background:var(--red-wash);color:var(--caramel-ink);border-radius:8px;padding:9px 13px;font-size:13px;margin:12px 0 2px}
 .f-tel{margin-top:10px}
 .f-note{color:var(--muted);font-size:13px;margin-top:12px}
+.prow{max-width:100%}
+.post h3,.sujet-h,.carte h3,.mini strong,.mini small,.thr strong,.reply div,.detail h3,.hd-name strong{min-width:0;overflow-wrap:break-word}
+.post p,.reply p,.f-note,.hrsline,.statut{overflow-wrap:break-word}
+main a{overflow-wrap:anywhere}
 .carte-empty p{margin:0 0 6px}
 .carte-empty .btn{font-family:var(--sans);font-style:normal;font-size:13.5px;margin:10px 9px 0 0}
 .hrs-chip{flex-basis:100%;color:var(--caramel-ink);font-size:12.5px;margin-top:1px;padding-left:2px}
@@ -259,7 +263,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   body{padding:8px}
   .prow{flex-wrap:wrap}
   .prow .dots{display:none}
-  .prow .who{width:100%;white-space:normal;margin-top:1px}
+  .prow .who{width:100%;white-space:normal;margin-top:1px;text-align:left}
   .prow .tag{margin-left:0;margin-top:5px}
   .hd-badge{font-size:10.5px;padding:5px 9px;white-space:normal;text-align:left;flex:1 1 180px;border-radius:10px}
 }

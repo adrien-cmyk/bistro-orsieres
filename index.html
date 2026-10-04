@@ -10,7 +10,7 @@
   --paper:#f8f5e9;           /* crème chaude */
   --panel:#e7e7cf;           /* vert clair, lumière de clairière */
   --ink:#36291a;             /* brun foncé, bois sombre */
-  --muted:#79705c;
+  --muted:#655c49;
   --line:#ddd7c0;
   --red:#a85e14;             /* accent principal : orange brûlé */
   --red-dark:#8a4c10;
@@ -89,6 +89,11 @@ main{min-width:0}
 .prow .metier{font-family:var(--serif);font-size:17px;flex-shrink:0}
 .prow .dots{flex:1;min-width:24px;border-bottom:2px dotted var(--line);transform:translateY(-5px);margin:0 10px}
 .prow .who{color:var(--muted);white-space:nowrap}
+.statut{display:inline-block;background:var(--red-wash);color:var(--caramel-ink);border-radius:8px;padding:9px 13px;font-size:13px;margin:12px 0 2px}
+.f-tel{margin-top:10px}
+.f-note{color:var(--muted);font-size:13px;margin-top:12px}
+.carte-empty p{margin:0 0 6px}
+.carte-empty .btn{font-family:var(--sans);font-style:normal;font-size:13.5px;margin:10px 9px 0 0}
 .hrs-chip{flex-basis:100%;color:var(--caramel-ink);font-size:12.5px;margin-top:1px;padding-left:2px}
 .hrsline{color:var(--muted);font-size:13.5px;margin:10px 0 4px}
 .hrsline strong{color:var(--ink)}
@@ -228,7 +233,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   .prow .dots{display:none}
   .prow .who{width:100%;white-space:normal;margin-top:1px}
   .prow .tag{margin-left:0;margin-top:5px}
-  .hd-badge{display:none}
+  .hd-badge{font-size:10.5px;padding:4px 8px;white-space:normal;text-align:center}
 }
 @media(prefers-reduced-motion:no-preference){
   .detail{animation:in .25s ease}
@@ -333,7 +338,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
     <h1>Il y a forcément quelqu'un, à Orsières, qui sait faire ça.</h1>
     <div class="search">
       <div class="search-box">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#79705c" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#655c49" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
         <input id="q" type="search" placeholder="Un métier, un coup de main, un village…" aria-label="Rechercher un savoir-faire">
       </div>
       <button type="button" class="btn btn-red" id="propose">Je propose une idée</button>
@@ -411,6 +416,8 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   ACTEURS.forEach(a => { if(a.horaire == null) a.horaire = ''; });
   const SECTEURS = [...new Set(ACTEURS.map(a => a.secteur))].sort((a,b) => a.localeCompare(b,'fr'));
   const colorOf = s => 'c' + (SECTEURS.indexOf(s) % 6);
+  const COUNTS = {}; ACTEURS.forEach(a => { COUNTS[a.secteur] = (COUNTS[a.secteur] || 0) + 1; });
+  const TOP6 = [...SECTEURS].sort((a,b) => COUNTS[b] - COUNTS[a]).slice(0,6).sort((a,b) => a.localeCompare(b,'fr'));
   const LOCALITES = new Set(ACTEURS.map(a => a.localite));
   const LIEUX = ACTEURS.filter(a => a.secteur === 'Hébergement et accueil').map(a => ({nom:a.nom, loc:a.localite}))
     .concat([{nom:'Salle de Praz-de-Fort (commune)', loc:'Praz-de-Fort'}, {nom:'Salle de Podemainge (commune)', loc:'Orsières'}]);
@@ -428,10 +435,13 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   const detail = document.getElementById('detail');
   const q = document.getElementById('q');
   const modal = document.getElementById('modal');
+  const composer = document.getElementById('composer');
   const modalBody = document.getElementById('modal-body');
   let view = 'carte';
   let cat = 'all';
   let sujetId = null;
+  let ficheId = null, prevView = 'carte';
+  let moreCats = false;
 
   const isMember = p => !!ME && p.members.includes('Vous');
   const unread = () => NOTIFS.filter(n => !n.read).length;
@@ -532,17 +542,52 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   }
 
   // ---- recherche / carte ----
+  const STOP = new Set(['je','j','mon','ma','mes','ton','sa','son','ses','le','la','les','un','une','des','de','du','d','l','pour','qui','que','quoi','quelqu','quelquun','peut','sait','faire','fait','me','il','elle','on','faut','besoin','cherche','recherche','trouve','trouver','aide','aider','veux','voudrais','aimerais','a','au','aux','et','ou','en','dans','sur','avec','vers','chez','pres','proche','comment','est','ce','se']);
+  const SYN = {
+    velo:['vtt','bike','cycle','pneus'], vtt:['velo'],
+    reparer:['reparation','entretien','depannage','revision','service'], repare:['reparation','entretien','depannage'], reparation:['entretien','depannage'],
+    plombier:['sanitaire'], electricien:['electricite','depannage'],
+    coiffeur:['coiffure'], coiffeuse:['coiffure'],
+    menuisier:['menuiserie','bois','agencement'], charpentier:['charpente'],
+    peintre:['peinture','gypserie'], platrier:['gypserie'],
+    jardinier:['jardin','paysag'], jardinage:['jardin','paysag'],
+    informatique:['ordinateur','pc','mac'], ordinateur:['informatique','pc'],
+    photographe:['photo'], video:['audiovisuel','film'],
+    macon:['maconnerie'], carreleur:['carrelage'],
+    garagiste:['garage','auto'], voiture:['garage','auto','carrosserie','pneus'],
+    taxi:['transport','transfert'],
+    massage:['masso','bien-etre'], osteo:['osteopathie'], physio:['physiotherapie'],
+    avocat:['notaire','droit'], comptable:['fiduciaire','comptabilite'], impot:['fiduciaire','fiscalite'],
+    guide:['montagne','randonnee'], randonnee:['guide','montagne'],
+    hotel:['hebergement'], dormir:['hebergement','hotel'],
+    fleur:['fleuriste','bouquet'],
+    toiture:['couverture','couvreur','ferblanterie'], toit:['couverture','ferblanterie'],
+    chauffage:['sanitaire','cad','energie'], solaire:['panneaux','energie'],
+    menage:['nettoyage','conciergerie'], nettoyer:['nettoyage'],
+    bucheron:['forestier','bucheronnage'], ski:['location','sport'], traiteur:['boucherie']
+  };
+  function expand(w){
+    const base = w.replace(/s$/, '');
+    const out = new Set([w, base]);
+    (SYN[w] || SYN[base] || []).forEach(x => out.add(x));
+    return [...out];
+  }
+  function terms(query){
+    return norm(query).split(/[^a-z0-9]+/).filter(w => w.length > 1 && !STOP.has(w));
+  }
   function matches(a, query){
-    if(!query) return true;
+    const ws = terms(query);
+    if(!ws.length) return true;
     const hay = norm([a.nom, a.service, a.localite, a.secteur, a.horaire].join(' '));
-    return norm(query).split(/\s+/).every(w => hay.includes(w));
+    return ws.every(w => expand(w).some(c => hay.includes(c)));
   }
   function mark(text, query){
-    if(!query) return esc(text);
+    const ws = terms(query);
+    if(!ws.length) return esc(text);
     const n = norm(text);
-    for(const w of norm(query).split(/\s+/)){
-      const i = n.indexOf(w);
-      if(i >= 0) return esc(text.slice(0,i)) + '<span class="hl">' + esc(text.slice(i, i+w.length)) + '</span>' + esc(text.slice(i+w.length));
+    for(const w of ws) for(const c of expand(w)){
+      const i = n.indexOf(c);
+      if(i >= 0) return esc(text.slice(0,i)) + '<span class="hl">' + esc(text.slice(i, i+c.length)) + '</span>' + esc(text.slice(i+c.length));
     }
     return esc(text);
   }
@@ -550,9 +595,12 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   function renderCarte(){
     const query = q.value.trim();
     const pool = ACTEURS.filter(a => (cat === 'all' || a.secteur === cat) && matches(a, query));
-    const chips = ['all', ...SECTEURS].map(c =>
+    const showAll = moreCats || (cat !== 'all' && !TOP6.includes(cat));
+    const shown = showAll ? SECTEURS : TOP6;
+    const chips = ['all', ...shown].map(c =>
       '<button type="button" data-cat="' + esc(c) + '" aria-pressed="' + String(c === cat) + '">' +
-      (c === 'all' ? 'Tous les secteurs' : esc(c)) + '</button>').join('');
+      (c === 'all' ? 'Tous les secteurs' : esc(c)) + '</button>').join('') +
+      '<button type="button" id="more-cats">' + (showAll ? 'Réduire les secteurs' : '+ ' + (SECTEURS.length - TOP6.length) + ' autres secteurs') + '</button>';
     let body = '';
     for(const s of SECTEURS){
       const group = pool.filter(a => a.secteur === s).sort((a,b) => a.nom.localeCompare(b.nom,'fr'));
@@ -569,7 +617,12 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
         }).join('');
     }
     if(!body){
-      body = '<p class="carte-empty">Personne ne propose encore « ' + esc(query) + ' » — ce sera peut-être la première inscription du réseau.</p>';
+      body = '<div class="carte-empty"><p>' +
+        (query ? 'Aucun résultat pour « ' + esc(query) + ' ». ' : 'Aucun résultat avec ces filtres. ') +
+        "L'annuaire est encore incomplet et la recherche ne reconnaît pas toutes les formulations.</p>" +
+        '<button type="button" class="btn btn-ghost" id="clear-search">Effacer la recherche</button>' +
+        (query ? '<button type="button" class="btn btn-red" id="pub-besoin">Publier ce besoin sur la place</button>' : '') +
+        '</div>';
     }
     main.innerHTML =
       '<div class="sec-top"><h2>Métiers / talents</h2><small>' + pool.length + ' acteurs affichés</small></div>' +
@@ -740,6 +793,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
       b.setAttribute('aria-pressed', String(b.dataset.view === view)));
     if(view === 'carte') renderCarte();
     else if(view === 'sujet') renderSujet();
+    else if(view === 'fiche') renderFiche();
     else if(view === 'projets') renderProjets();
     else if(view === 'espace') renderEspace();
     else renderPlace();
@@ -761,30 +815,34 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
     }).join('');
   }
 
-  function showProfile(i){
-    const a = ACTEURS[i];
-    detail.hidden = false;
+  function openFiche(i){
+    ficheId = i;
+    if(view !== 'fiche') prevView = view;
+    view = 'fiche'; render();
+    main.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function renderFiche(){
+    const a = ACTEURS[ficheId];
+    if(a == null){ view = 'carte'; renderCarte(); return; }
     let tel = '';
     if(a.telephone){
-      tel = '<p><a href="tel:+41' + a.telephone.replace(/\D/g,'').slice(1) + '">' + esc(a.telephone) + '</a> (numéro public)</p>';
+      tel = '<p class="f-tel"><a href="tel:+41' + a.telephone.replace(/\D/g,'').slice(1) + '">' + esc(a.telephone) + '</a> — numéro public, appel direct</p>';
     }
-    detail.innerHTML =
-      '<p class="kick">' + esc(a.localite) + '</p>' +
-      '<h3>' + esc(a.nom) + '</h3>' +
+    main.innerHTML =
+      '<div class="sujet-top"><button type="button" class="btn btn-ghost" data-fiche-back>&larr; Retour aux résultats</button></div>' +
+      '<article class="post">' +
+      '<p class="kick">' + esc(a.localite) + ' · ' + esc(a.secteur) + '</p>' +
+      '<h2 class="sujet-h">' + esc(a.nom) + '</h2>' +
       '<p>' + esc(a.service) + '</p>' +
-      '<span class="tag tag-ent">' + esc(a.secteur) + '</span>' +
-      '<p class="hrsline"><strong>Horaires</strong><br>' + (a.horaire ? esc(a.horaire) : 'À confirmer — renseignés par le prestataire à la validation de sa fiche.') + '</p>' +
+      '<p class="statut">Fiche issue de sources publiques — pas encore confirmée par son titulaire. Coordonnées à vérifier.</p>' +
+      '<p class="hrsline"><strong>Horaires</strong><br>' + (a.horaire ? esc(a.horaire) : 'À confirmer — renseignés par le prestataire à la confirmation de sa fiche.') + '</p>' +
       tel +
       '<p><a href="' + esc(a.source) + '" target="_blank" rel="noopener noreferrer">Voir la fiche source</a></p>' +
-      '<form><label for="msg">Entrer en contact via la place</label>' +
-      '<textarea id="msg" rows="2" placeholder="Bonjour, j\'aimerais…" required></textarea>' +
-      '<button type="submit" class="btn btn-red">Envoyer le message</button>' +
-      '<p class="fb" aria-live="polite"></p></form>';
-    detail.querySelector('form').addEventListener('submit', e => {
-      e.preventDefault();
-      detail.querySelector('.fb').textContent = "Message simulé — rien n'a été envoyé. Dans la vraie version, le prestataire le recevrait dans sa messagerie après avoir confirmé sa fiche.";
-    });
-    if(window.innerWidth < 820) detail.scrollIntoView({behavior:'smooth', block:'nearest'});
+      '<div class="act"><button type="button" class="btn btn-red" data-invite>Inviter à rejoindre le Bistro</button></div>' +
+      '<p class="fb" id="invite-fb" aria-live="polite"></p>' +
+      '<p class="f-note">La messagerie du Bistro s\'active lorsque le titulaire confirme sa fiche — en attendant, le téléphone public reste le bon canal.</p>' +
+      '</article>';
   }
 
   // ---- clics ----
@@ -831,7 +889,21 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
     if(thr){ const t = THREADS[Number(thr.dataset.thr)]; t.open = !t.open; renderEspace(); return; }
     if(e.target.closest('#logout')){ ME = null; view = 'place'; updateHeader(); render(); return; }
     const person = e.target.closest('[data-person]');
-    if(person){ showProfile(Number(person.dataset.person)); return; }
+    if(person){ openFiche(Number(person.dataset.person)); return; }
+    if(e.target.closest('[data-fiche-back]')){ view = prevView; render(); return; }
+    if(e.target.closest('[data-invite]')){
+      document.getElementById('invite-fb').textContent = "Invitation simulée — le prestataire recevrait un e-mail l'invitant à confirmer gratuitement sa fiche, compléter ses horaires et activer la messagerie.";
+      return;
+    }
+    if(e.target.closest('#more-cats')){ moreCats = !moreCats; renderCarte(); return; }
+    if(e.target.closest('#clear-search')){ q.value = ''; cat = 'all'; renderCarte(); return; }
+    if(e.target.closest('#pub-besoin')){
+      composer.hidden = false;
+      document.getElementById('idea').value = 'Je cherche : ' + q.value.trim();
+      composer.scrollIntoView({behavior:'smooth', block:'start'});
+      document.getElementById('idea').focus();
+      return;
+    }
     if(e.target.closest('#add-skill')){
       detail.hidden = false;
       detail.innerHTML = '<p class="kick">Nouveau profil</p><h3>Inscrire un savoir-faire</h3><p>Dans la vraie version : les entreprises confirment et complètent leur fiche, et les habitants inscrivent leurs savoir-faire — entraide ou prestation. Chaque fiche passe par la modération avant publication.</p>';
@@ -905,7 +977,6 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
 
   q.addEventListener('input', () => { if(view !== 'carte'){ view = 'carte'; } render(); });
 
-  const composer = document.getElementById('composer');
   document.getElementById('propose').addEventListener('click', () => {
     composer.hidden = false; document.getElementById('idea').focus();
   });

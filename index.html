@@ -227,7 +227,21 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
 .notif.read .dot{background:var(--line)}
 .notif small{color:var(--muted);display:block;margin-top:2px}
 @media(max-width:820px){.nav{position:sticky;top:0;z-index:30;background:#fff;box-shadow:0 1px 0 var(--line)}main{scroll-margin-top:62px}.hero{padding:26px 20px 24px}}
-@media(max-width:560px){.hd{flex-wrap:wrap}.hd-auth{margin-left:auto}.modal-card{margin:4vh 10px}}
+@media(max-width:560px){
+.hd{flex-wrap:wrap;row-gap:11px;padding:14px 16px 12px}
+.hd-logo{padding:0}
+.hd-logo svg{height:42px}
+.hd-name{flex:1 1 170px;min-width:0}
+.hd-name strong{font-size:21px;letter-spacing:-.2px}
+.hd-name span{font-size:12px;line-height:1.35;margin-top:2px}
+.hd-auth{margin-left:auto;gap:7px}
+.hd-auth .btn{padding:9px 13px;font-size:13px}
+.bell{width:36px;height:36px}
+.nav{flex-wrap:nowrap;overflow-x:auto;padding:8px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.nav::-webkit-scrollbar{display:none}
+.nav button{flex:0 0 auto;white-space:nowrap}
+.hero h1{font-size:24px;line-height:1.22}
+.modal-card{margin:4vh 10px}}
 
 /* ---------- footer ---------- */
 .ft{border-top:1px solid var(--line);padding:20px 32px 26px;background:#fff}
@@ -247,7 +261,7 @@ aside .sub{color:var(--muted);font-size:13px;margin-bottom:8px}
   .prow .dots{display:none}
   .prow .who{width:100%;white-space:normal;margin-top:1px}
   .prow .tag{margin-left:0;margin-top:5px}
-  .hd-badge{font-size:10.5px;padding:4px 8px;white-space:normal;text-align:center}
+  .hd-badge{font-size:10.5px;padding:5px 9px;white-space:normal;text-align:left;flex:1 1 180px;border-radius:10px}
 }
 @media(prefers-reduced-motion:no-preference){
   .detail{animation:in .25s ease}
